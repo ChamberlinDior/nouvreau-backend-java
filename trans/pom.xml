@@ -117,28 +117,7 @@
 			</plugin>
 
 			<!-- Plugin Docker pour Maven -->
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>dockerfile-maven-plugin</artifactId>
-				<version>1.4.13</version>
-				<executions>
-					<execution>
-						<id>default</id>
-						<goals>
-							<goal>build</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<repository>ton-repo-docker/trans</repository>
-					<tag>latest</tag>
-					<contextDirectory>${project.basedir}</contextDirectory>
-					<dockerfile>${project.basedir}/Dockerfile</dockerfile>
-					<buildArgs>
-						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-					</buildArgs>
-				</configuration>
-			</plugin>
+
 		</plugins>
 
 		<finalName>trans-0.0.1-SNAPSHOT</finalName> <!-- Nom du fichier JAR généré -->
