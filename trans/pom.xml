@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.2</version>
+		<version>3.3.2</version> <!-- Utilisation de la version la plus récente -->
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.bus</groupId>
 	<artifactId>trans</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>trans</name>
 	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+
 	<properties>
 		<java.version>21</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<testng.version>6.9.10</testng.version> <!-- Définition de la version de TestNG -->
 	</properties>
+
 	<dependencies>
+		<!-- Dépendances Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -38,7 +37,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -56,6 +54,12 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -63,7 +67,26 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<targetPath>${project.build.directory}/dist/resources</targetPath>
+				<includes>
+					<include>this_file_will_go_outside_the_jar_in_the_folder.txt</include>
+					<include>this_too.txt</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>this_file_will_go_outside_the_jar_in_the_folder.txt</exclude>
+					<exclude>this_too.txt</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
 		<plugins>
+			<!-- Plugin Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -76,7 +99,48 @@
 					</excludes>
 				</configuration>
 			</plugin>
-		</plugins>
-	</build>
 
+			<!-- Plugin pour gérer l'encodage des fichiers -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<outputDirectory>${project.build.directory}/dist/resources</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- Plugin pour gérer la compilation -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+			</plugin>
+
+			<!-- Plugin Docker pour Maven -->
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>ton-repo-docker/trans</repository>
+					<tag>latest</tag>
+					<contextDirectory>${project.basedir}</contextDirectory>
+					<dockerfile>${project.basedir}/Dockerfile</dockerfile>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<finalName>trans-0.0.1-SNAPSHOT</finalName> <!-- Nom du fichier JAR généré -->
+	</build>
 </project>
