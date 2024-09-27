@@ -3,6 +3,7 @@ package com.bus.trans.service;
 import com.bus.trans.dto.TerminalDTO;
 import com.bus.trans.model.GestionTerminals;
 import com.bus.trans.repository.GestionTerminalsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class GestionTerminalsService {
     @Autowired
     private GestionTerminalsRepository gestionTerminalsRepository;
 
-    // Sauvegarder les informations d'un terminal
+    @Transactional  // Ajoute cette annotation pour s'assurer que les transactions sont bien gérées
     public GestionTerminals saveTerminalInfo(TerminalDTO terminalDTO) {
         GestionTerminals gestionTerminals = new GestionTerminals();
         gestionTerminals.setAndroidId(terminalDTO.getAndroidId());
@@ -40,48 +41,5 @@ public class GestionTerminalsService {
         gestionTerminals.setVerificationTime(terminalDTO.getVerificationTime());
 
         return gestionTerminalsRepository.save(gestionTerminals);
-    }
-
-    // Récupérer un terminal par ID
-    public Optional<GestionTerminals> getTerminalById(Long id) {
-        return gestionTerminalsRepository.findById(id);
-    }
-
-    // Récupérer tous les terminaux
-    public List<GestionTerminals> getAllTerminals() {
-        return gestionTerminalsRepository.findAll();
-    }
-
-    // Mettre à jour un terminal existant
-    public GestionTerminals updateTerminal(Long id, TerminalDTO terminalDTO) {
-        Optional<GestionTerminals> terminalOptional = gestionTerminalsRepository.findById(id);
-        if (terminalOptional.isPresent()) {
-            GestionTerminals terminal = terminalOptional.get();
-            terminal.setAndroidId(terminalDTO.getAndroidId());
-            terminal.setBatteryLevel(terminalDTO.getBatteryLevel());
-            terminal.setTerminalType(terminalDTO.getTerminalType());
-            terminal.setUserName(terminalDTO.getUserName());
-            terminal.setUserUniqueId(terminalDTO.getUserUniqueId());
-
-            terminal.setClientName(terminalDTO.getClientName());
-            terminal.setRfid(terminalDTO.getRfid());
-            terminal.setForfaitType(terminalDTO.getForfaitType());
-            terminal.setForfaitStatus(terminalDTO.getForfaitStatus());
-            terminal.setVerificationTime(terminalDTO.getVerificationTime());
-
-            terminal.setTrajetChauffeurName(terminalDTO.getTrajetChauffeurName());
-            terminal.setTrajetChauffeurUniqueId(terminalDTO.getTrajetChauffeurUniqueId());
-            terminal.setTrajetDestination(terminalDTO.getTrajetDestination());
-            terminal.setTrajetStartTime(terminalDTO.getTrajetStartTime());
-
-            return gestionTerminalsRepository.save(terminal);
-        } else {
-            return null;
-        }
-    }
-
-    // Supprimer un terminal
-    public void deleteTerminal(Long id) {
-        gestionTerminalsRepository.deleteById(id);
     }
 }
