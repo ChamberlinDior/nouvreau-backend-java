@@ -1,8 +1,6 @@
 package com.bus.trans.model;
 
 import jakarta.persistence.*;
-
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,22 +11,41 @@ public class GestionTerminals {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String androidId;
+
+    @Column(nullable = false)
     private int batteryLevel;
+
+    @Column(nullable = false)
     private String terminalType;
+
+    @Column(nullable = false)
     private String userName;
+
+    @Column(nullable = false)
     private String userUniqueId;
+
+    @Column(nullable = false)
     private LocalDateTime connectionTime;
 
     private String clientName;
+
+    @Column(nullable = true)
     private String rfid;
+
     private String forfaitType;
+
     private String forfaitStatus;
+
     private LocalDateTime verificationTime;
 
     private String trajetChauffeurName;
+
     private String trajetChauffeurUniqueId;
+
     private String trajetDestination;
+
     private LocalDateTime trajetStartTime;
 
     // Getters and Setters

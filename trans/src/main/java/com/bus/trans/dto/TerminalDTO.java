@@ -3,6 +3,7 @@ package com.bus.trans.dto;
 import java.time.LocalDateTime;
 
 public class TerminalDTO {
+
     private String androidId;
     private int batteryLevel;
     private String terminalType;
