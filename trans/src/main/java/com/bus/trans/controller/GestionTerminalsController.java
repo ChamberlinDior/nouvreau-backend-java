@@ -17,7 +17,7 @@ public class GestionTerminalsController {
     @Autowired
     private GestionTerminalsService gestionTerminalsService;
 
-    // Créer un terminal
+    // Créer un terminal et enregistrer les infos
     @PostMapping
     public ResponseEntity<GestionTerminals> saveTerminalInfo(@RequestBody TerminalDTO terminalDTO) {
         GestionTerminals gestionTerminals = gestionTerminalsService.saveTerminalInfo(terminalDTO);
