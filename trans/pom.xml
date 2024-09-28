@@ -68,8 +68,8 @@
 
 			<!-- Maven Compiler Plugin -->
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.1</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 
