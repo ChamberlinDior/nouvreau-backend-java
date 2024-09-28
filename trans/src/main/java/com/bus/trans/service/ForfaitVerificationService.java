@@ -1,4 +1,5 @@
 package com.bus.trans.service;
+
 import com.bus.trans.dto.ForfaitVerificationDTO;
 import com.bus.trans.model.ForfaitVerification;
 import com.bus.trans.repository.ForfaitVerificationRepository;
@@ -21,7 +22,8 @@ public class ForfaitVerificationService {
                 forfaitVerificationDTO.getStatutForfait(),
                 forfaitVerificationDTO.getAndroidId(),
                 forfaitVerificationDTO.getRoleUtilisateur(),
-                forfaitVerificationDTO.getNomUtilisateur()  // Capture le nom de l'utilisateur
+                forfaitVerificationDTO.getNomUtilisateur(),
+                forfaitVerificationDTO.isForfaitActiverParClient()  // **Prise en compte de la nouvelle propriété**
         );
 
         return forfaitVerificationRepository.save(verification);

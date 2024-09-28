@@ -7,20 +7,30 @@ public class ForfaitVerificationDTO {
     private String androidId;
     private String roleUtilisateur;
     private String nomUtilisateur;  // Nom de l'utilisateur qui effectue la vérification
+    private boolean forfaitActiverParClient;  // **Nouvelle propriété**
 
     public ForfaitVerificationDTO() {
     }
 
-    public ForfaitVerificationDTO(String nomClient, String rfid, String statutForfait, String androidId, String roleUtilisateur, String nomUtilisateur) {
+    public ForfaitVerificationDTO(String nomClient, String rfid, String statutForfait, String androidId, String roleUtilisateur, String nomUtilisateur, boolean forfaitActiverParClient) {
         this.nomClient = nomClient;
         this.rfid = rfid;
         this.statutForfait = statutForfait;
         this.androidId = androidId;
         this.roleUtilisateur = roleUtilisateur;
         this.nomUtilisateur = nomUtilisateur;
+        this.forfaitActiverParClient = forfaitActiverParClient;
     }
 
-    // Getters et Setters
+    // Getters et Setters pour la nouvelle propriété
+    public boolean isForfaitActiverParClient() {
+        return forfaitActiverParClient;
+    }
+
+    public void setForfaitActiverParClient(boolean forfaitActiverParClient) {
+        this.forfaitActiverParClient = forfaitActiverParClient;
+    }
+
     public String getNomClient() {
         return nomClient;
     }

@@ -1,7 +1,6 @@
 package com.bus.trans.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
@@ -33,21 +32,35 @@ public class ForfaitVerification {
     @Column(nullable = false)
     private Date dateVerification;
 
+    // **Nouvelle colonne pour savoir si le forfait a été activé par le client**
+    @Column(nullable = false)
+    private boolean forfaitActiverParClient;
+
     public ForfaitVerification() {
         this.dateVerification = new Date();  // Initialiser avec la date actuelle
     }
 
-    public ForfaitVerification(String nomClient, String rfid, String statutForfait, String androidId, String roleUtilisateur, String nomUtilisateur) {
+    public ForfaitVerification(String nomClient, String rfid, String statutForfait, String androidId, String roleUtilisateur, String nomUtilisateur, boolean forfaitActiverParClient) {
         this.nomClient = nomClient;
         this.rfid = rfid;
         this.statutForfait = statutForfait;
         this.androidId = androidId;
         this.roleUtilisateur = roleUtilisateur;
         this.nomUtilisateur = nomUtilisateur;
+        this.forfaitActiverParClient = forfaitActiverParClient;
         this.dateVerification = new Date();
     }
 
-    // Getters et Setters
+    // Getters et Setters pour la nouvelle colonne
+    public boolean isForfaitActiverParClient() {
+        return forfaitActiverParClient;
+    }
+
+    public void setForfaitActiverParClient(boolean forfaitActiverParClient) {
+        this.forfaitActiverParClient = forfaitActiverParClient;
+    }
+
+    // Autres getters et setters inchangés...
     public Long getId() {
         return id;
     }
