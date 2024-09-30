@@ -17,7 +17,7 @@ COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Step 2: Run the application in a minimal image
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /opt/app
 
 # Copy the JAR from the build stage
