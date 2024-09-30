@@ -7,7 +7,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +20,16 @@ public class GestionTerminalsService {
     @Transactional
     public GestionTerminals saveTerminalInfo(TerminalDTO terminalDTO) {
         GestionTerminals gestionTerminals = new GestionTerminals();
+
+        // Données obligatoires
         gestionTerminals.setAndroidId(terminalDTO.getAndroidId());
         gestionTerminals.setBatteryLevel(terminalDTO.getBatteryLevel());
         gestionTerminals.setTerminalType(terminalDTO.getTerminalType());
         gestionTerminals.setUserName(terminalDTO.getUserName());
         gestionTerminals.setUserUniqueId(terminalDTO.getUserUniqueId());
         gestionTerminals.setConnectionTime(LocalDateTime.now());
+
+        // Données optionnelles
         gestionTerminals.setClientName(terminalDTO.getClientName());
         gestionTerminals.setRfid(terminalDTO.getRfid());
         gestionTerminals.setForfaitType(terminalDTO.getForfaitType());
@@ -37,6 +40,7 @@ public class GestionTerminalsService {
         gestionTerminals.setTrajetDestination(terminalDTO.getTrajetDestination());
         gestionTerminals.setTrajetStartTime(terminalDTO.getTrajetStartTime());
 
+        // Sauvegarde de l'entité
         return gestionTerminalsRepository.save(gestionTerminals);
     }
 
@@ -53,6 +57,8 @@ public class GestionTerminalsService {
         Optional<GestionTerminals> terminalOptional = gestionTerminalsRepository.findById(id);
         if (terminalOptional.isPresent()) {
             GestionTerminals terminal = terminalOptional.get();
+
+            // Mise à jour des informations
             terminal.setAndroidId(terminalDTO.getAndroidId());
             terminal.setBatteryLevel(terminalDTO.getBatteryLevel());
             terminal.setTerminalType(terminalDTO.getTerminalType());

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-
 public class GestionTerminals {
 
     @Id
@@ -48,8 +47,7 @@ public class GestionTerminals {
 
     private LocalDateTime trajetStartTime;
 
-    // Getters and Setters
-
+    // Getters et Setters
     public Long getId() {
         return id;
     }
