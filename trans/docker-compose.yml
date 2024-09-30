@@ -9,7 +9,7 @@ services:
     ports:
       - "3308:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data1:/var/lib/mysql
     restart: unless-stopped
 
   web-service:
@@ -27,4 +27,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  mysql_data:
+  mysql_data1:
