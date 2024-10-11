@@ -1,5 +1,6 @@
 package com.bus.trans.service;
 
+
 import com.bus.trans.dto.TerminalDTO;
 import com.bus.trans.model.GestionTerminals;
 import com.bus.trans.repository.GestionTerminalsRepository;

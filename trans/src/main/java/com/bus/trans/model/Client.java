@@ -1,8 +1,8 @@
 package com.bus.trans.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +13,7 @@ public class Client {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String numClient;
+    private String numClient;  // Numéro de client unique
 
     @Column(nullable = false)
     private String nom;
@@ -25,33 +25,18 @@ public class Client {
     private String ville;
 
     @Column(nullable = false)
-    private String nomAgent;
-
-    @Column(nullable = true, unique = true)
-    private String rfid;
+    private String nomAgent;  // Nom de l'agent ayant créé le client
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateCreation;
 
-    @Column(nullable = false)
-    private int balance;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date forfaitExpiration;
-
-    @Column(nullable = false)
-    private boolean forfaitActif;
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Carte> cartes;  // Liste de cartes associées à ce client
 
     public Client() {
         this.numClient = "CLT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         this.nomAgent = "Agent-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
-        this.balance = 0;
-        this.forfaitActif = false;
-    }
-
-    @PrePersist
-    protected void onCreate() {
         this.dateCreation = new Date();
     }
 
@@ -112,14 +97,6 @@ public class Client {
         this.nomAgent = nomAgent;
     }
 
-    public String getRfid() {
-        return rfid;
-    }
-
-    public void setRfid(String rfid) {
-        this.rfid = rfid;
-    }
-
     public Date getDateCreation() {
         return dateCreation;
     }
@@ -128,27 +105,11 @@ public class Client {
         this.dateCreation = dateCreation;
     }
 
-    public int getBalance() {
-        return balance;
+    public List<Carte> getCartes() {
+        return cartes;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
-
-    public Date getForfaitExpiration() {
-        return forfaitExpiration;
-    }
-
-    public void setForfaitExpiration(Date forfaitExpiration) {
-        this.forfaitExpiration = forfaitExpiration;
-    }
-
-    public boolean isForfaitActif() {
-        return forfaitActif;
-    }
-
-    public void setForfaitActif(boolean forfaitActif) {
-        this.forfaitActif = forfaitActif;
+    public void setCartes(List<Carte> cartes) {
+        this.cartes = cartes;
     }
 }

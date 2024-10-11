@@ -1,12 +1,15 @@
 package com.bus.trans.service;
+
+import com.bus.trans.model.Carte;
 import com.bus.trans.model.Client;
+import com.bus.trans.repository.CarteRepository;
 import com.bus.trans.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -14,90 +17,49 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private CarteRepository carteRepository;
+
+    // Obtenir tous les clients
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
+    // Sauvegarder un nouveau client
     public Client saveClient(Client client) {
-        // Génération automatique du numéro de client et de l'agent, ainsi que la date de création
-        if (client.getNumClient() == null || client.getNumClient().isEmpty()) {
-            client.setNumClient(generateClientNumber());
-        }
-
-        if (client.getNomAgent() == null || client.getNomAgent().isEmpty()) {
-            client.setNomAgent(generateAgentName());
-        }
-
-        if (client.getDateCreation() == null) {
-            client.setDateCreation(new Date());
-        }
-
-        // Validation des champs obligatoires
-        if (client.getNom() == null || client.getNom().isEmpty()) {
-            throw new IllegalArgumentException("Le nom est obligatoire");
-        }
-        if (client.getPrenom() == null || client.getPrenom().isEmpty()) {
-            throw new IllegalArgumentException("Le prénom est obligatoire");
-        }
-        if (client.getQuartier() == null || client.getQuartier().isEmpty()) {
-            throw new IllegalArgumentException("Le quartier est obligatoire");
-        }
-        if (client.getVille() == null || client.getVille().isEmpty()) {
-            throw new IllegalArgumentException("La ville est obligatoire");
-        }
-
         return clientRepository.save(client);
     }
 
+    // Obtenir un client par ID
     public Client getClientById(Long id) {
         return clientRepository.findById(id).orElse(null);
     }
 
+    // Obtenir un client par RFID
     public Client getClientByRFID(String rfid) {
-        return clientRepository.findByRfid(rfid).orElse(null);
+        Optional<Carte> carte = carteRepository.findByRfid(rfid);
+        return carte.map(Carte::getClient).orElse(null);
     }
 
-    public Client updateClient(Long id, Client clientDetails) {
-        Client client = getClientById(id);
+    // Ajouter une nouvelle carte à un client existant
+    public Carte addCarteToClient(Long clientId, Carte carte) {
+        Client client = getClientById(clientId);
         if (client != null) {
-            client.setNom(clientDetails.getNom());
-            client.setPrenom(clientDetails.getPrenom());
-            client.setQuartier(clientDetails.getQuartier());
-            client.setVille(clientDetails.getVille());
-            client.setNumClient(clientDetails.getNumClient());
-
-            // Mise à jour du nom de l'agent et de la date de création si fournis
-            if (clientDetails.getNomAgent() != null && !clientDetails.getNomAgent().isEmpty()) {
-                client.setNomAgent(clientDetails.getNomAgent());
-            }
-
-            if (clientDetails.getDateCreation() != null) {
-                client.setDateCreation(clientDetails.getDateCreation());
-            }
-
-            return clientRepository.save(client);
+            carte.setClient(client);
+            return carteRepository.save(carte);
         }
         return null;
     }
 
-    public Client assignRFID(Long id, String rfid) {
-        Client client = getClientById(id);
-        if (client != null) {
-            client.setRfid(rfid);
-            return clientRepository.save(client);
+    // Mise à jour d'une carte (désactivation ou changement de date de validité)
+    public Carte updateCarte(Long carteId, Carte carteDetails) {
+        Optional<Carte> carteOptional = carteRepository.findById(carteId);
+        if (carteOptional.isPresent()) {
+            Carte carte = carteOptional.get();
+            carte.setActive(carteDetails.isActive());
+            carte.setDateExpiration(carteDetails.getDateExpiration());
+            return carteRepository.save(carte);
         }
         return null;
-    }
-
-    public void deleteClient(Long id) {
-        clientRepository.deleteById(id);
-    }
-
-    private String generateClientNumber() {
-        return "CLT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-    }
-
-    private String generateAgentName() {
-        return "Agent-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
     }
 }

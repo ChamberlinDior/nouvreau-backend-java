@@ -1,6 +1,9 @@
 package com.bus.trans.dto;
 
+import java.util.List;
+
 public class ClientDTO {
+
     private Long id;
     private String numClient;
     private String nom;
@@ -9,7 +12,7 @@ public class ClientDTO {
     private String ville;
     private String dateCreation;
     private String nomAgent;
-    private String rfid; // Nouveau champ ajouté
+    private List<CarteDTO> cartes;  // Liste des cartes associées à ce client
 
     // Getters and Setters
     public Long getId() {
@@ -76,11 +79,11 @@ public class ClientDTO {
         this.nomAgent = nomAgent;
     }
 
-    public String getRfid() {
-        return rfid;
+    public List<CarteDTO> getCartes() {
+        return cartes;
     }
 
-    public void setRfid(String rfid) {
-        this.rfid = rfid;
+    public void setCartes(List<CarteDTO> cartes) {
+        this.cartes = cartes;
     }
 }
