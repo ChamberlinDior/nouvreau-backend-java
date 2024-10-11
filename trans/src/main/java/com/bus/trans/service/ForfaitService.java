@@ -1,8 +1,9 @@
 package com.bus.trans.service;
+
 import com.bus.trans.dto.ForfaitDTO;
-import com.bus.trans.model.Client;
+import com.bus.trans.model.Carte;
 import com.bus.trans.model.Forfait;
-import com.bus.trans.repository.ClientRepository;
+import com.bus.trans.repository.CarteRepository;
 import com.bus.trans.repository.ForfaitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,43 +21,43 @@ public class ForfaitService {
     private ForfaitRepository forfaitRepository;
 
     @Autowired
-    private ClientService clientService;
+    private CarteRepository carteRepository;
 
-    @Autowired
-    private ClientRepository clientRepository;
-
-    // Récupérer l'historique des forfaits d'un client par ID
-    public List<ForfaitDTO> getForfaitHistory(Long clientId) {
-        List<Forfait> forfaits = forfaitRepository.findByClientId(clientId);
+    // Récupérer l'historique des forfaits d'une carte par ID
+    public List<ForfaitDTO> getForfaitHistory(Long carteId) {
+        List<Forfait> forfaits = forfaitRepository.findByCarteId(carteId);
         return forfaits.stream()
                 .map(forfait -> new ForfaitDTO(
+                        forfait.getId(),
                         forfait.getTypeForfait(),
                         forfait.getDateActivation(),
                         forfait.getDateExpiration(),
-                        forfait.getClient().getId(),
-                        forfait.getClient().getRfid()))
+                        forfait.getCarte().getId(),
+                        forfait.getCarte().getRfid()))
                 .collect(Collectors.toList());
     }
 
-    // Créer un forfait pour un client et mettre à jour le statut dans la table Client
+    // Créer un forfait pour une carte et mettre à jour le statut de la carte
     public Forfait createForfait(ForfaitDTO forfaitDTO) {
-        Client client = clientService.getClientByRFID(forfaitDTO.getRfid());
-        if (client == null) {
-            throw new IllegalArgumentException("Client introuvable avec le RFID fourni");
+        Optional<Carte> carteOpt = carteRepository.findById(forfaitDTO.getCarteId());
+        if (carteOpt.isEmpty()) {
+            throw new IllegalArgumentException("Carte introuvable avec l'ID fourni");
         }
+
+        Carte carte = carteOpt.get();
 
         // Calculer les dates d'activation et d'expiration du forfait
         Date dateActivation = new Date();
         Date dateExpiration = calculateExpirationDate(forfaitDTO.getTypeForfait(), dateActivation);
 
         // Créer le forfait
-        Forfait forfait = new Forfait(forfaitDTO.getTypeForfait(), dateActivation, dateExpiration, client);
+        Forfait forfait = new Forfait(forfaitDTO.getTypeForfait(), dateActivation, dateExpiration, carte);
         forfaitRepository.save(forfait);
 
-        // Mettre à jour le client avec le statut du forfait et la date d'expiration
-        client.setForfaitActif(true);  // Forfait activé
-        client.setForfaitExpiration(dateExpiration);  // Date d'expiration du forfait
-        clientRepository.save(client);  // Enregistrer les modifications dans la table Client
+        // Mettre à jour la carte avec le statut du forfait et la date d'expiration
+        carte.setForfaitActif(true);
+        carte.setForfaitExpiration(dateExpiration);
+        carteRepository.save(carte);
 
         return forfait;
     }
@@ -83,38 +85,43 @@ public class ForfaitService {
         forfaitRepository.deleteById(id);
     }
 
-    // Récupérer le statut du forfait via RFID
+    // Récupérer le statut du forfait via RFID de la carte
     public ForfaitDTO getForfaitStatusByRFID(String rfid) {
-        Client client = clientService.getClientByRFID(rfid);
-        if (client == null) {
-            return null; // Client introuvable
+        Optional<Carte> carteOpt = carteRepository.findByRfid(rfid);
+        if (carteOpt.isEmpty()) {
+            return null; // Carte introuvable
         }
 
+        Carte carte = carteOpt.get();
+
         // Vérifier le statut du forfait (actif ou inactif)
-        if (client.isForfaitActif()) {
-            Date expirationDate = client.getForfaitExpiration();
+        if (carte.isForfaitActif()) {
+            Date expirationDate = carte.getForfaitExpiration();
             if (expirationDate != null && expirationDate.after(new Date())) {
                 return new ForfaitDTO(
+                        carte.getId(),
                         "Forfait Actif",
-                        client.getForfaitExpiration(),
-                        client.getForfaitExpiration(),
-                        client.getId(),
-                        client.getRfid());
+                        carte.getForfaitExpiration(),
+                        carte.getForfaitExpiration(),
+                        carte.getId(),
+                        carte.getRfid());
             } else {
                 return new ForfaitDTO(
+                        carte.getId(),
                         "Forfait Expiré",
-                        client.getForfaitExpiration(),
-                        client.getForfaitExpiration(),
-                        client.getId(),
-                        client.getRfid());
+                        carte.getForfaitExpiration(),
+                        carte.getForfaitExpiration(),
+                        carte.getId(),
+                        carte.getRfid());
             }
         } else {
             return new ForfaitDTO(
+                    carte.getId(),
                     "Aucun forfait actif",
                     null,
                     null,
-                    client.getId(),
-                    client.getRfid());
+                    carte.getId(),
+                    carte.getRfid());
         }
     }
 }

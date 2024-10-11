@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "forfaits")
 public class Forfait {
 
     @Id
@@ -11,27 +12,28 @@ public class Forfait {
     private Long id;
 
     @Column(nullable = false)
-    private String typeForfait;
+    private String typeForfait;  // Ex: "jour", "semaine", "mois"
 
-    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date dateActivation;
+    @Column(nullable = false)
+    private Date dateActivation;  // Date d'activation du forfait
 
-    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date dateExpiration;
+    @Column(nullable = false)
+    private Date dateExpiration;  // Date d'expiration du forfait
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @JoinColumn(name = "carte_id", nullable = false)  // Association avec la carte
+    private Carte carte;  // Le forfait est désormais lié à une carte
 
+    // Constructeurs
     public Forfait() {}
 
-    public Forfait(String typeForfait, Date dateActivation, Date dateExpiration, Client client) {
+    public Forfait(String typeForfait, Date dateActivation, Date dateExpiration, Carte carte) {
         this.typeForfait = typeForfait;
         this.dateActivation = dateActivation;
         this.dateExpiration = dateExpiration;
-        this.client = client;
+        this.carte = carte;
     }
 
     // Getters et Setters
@@ -67,11 +69,22 @@ public class Forfait {
         this.dateExpiration = dateExpiration;
     }
 
-    public Client getClient() {
-        return client;
+    public Carte getCarte() {
+        return carte;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setCarte(Carte carte) {
+        this.carte = carte;
+    }
+
+    @Override
+    public String toString() {
+        return "Forfait{" +
+                "id=" + id +
+                ", typeForfait='" + typeForfait + '\'' +
+                ", dateActivation=" + dateActivation +
+                ", dateExpiration=" + dateExpiration +
+                ", carteId=" + (carte != null ? carte.getId() : null) +
+                '}';
     }
 }

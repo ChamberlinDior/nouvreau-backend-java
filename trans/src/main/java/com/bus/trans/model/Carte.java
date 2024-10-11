@@ -31,14 +31,23 @@ public class Carte {
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;  // Association avec le client
 
+    // Ajout des propriétés forfaitActif et forfaitExpiration
+    @Column(nullable = false)
+    private boolean forfaitActif;  // Statut du forfait (actif ou inactif)
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date forfaitExpiration;  // Date d'expiration du forfait
+
     public Carte() {
         this.rfid = "RFID-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         this.nomAgent = "Agent-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
         this.dateCreation = new Date();
         this.active = true;  // Par défaut, la carte est active
+        this.forfaitActif = false;  // Par défaut, aucun forfait n'est actif
     }
 
-    // Getters and Setters
+    // Getters et Setters pour toutes les propriétés
+
     public Long getId() {
         return id;
     }
@@ -93,5 +102,37 @@ public class Carte {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    // Getters et Setters pour les nouveaux champs forfaitActif et forfaitExpiration
+
+    public boolean isForfaitActif() {
+        return forfaitActif;
+    }
+
+    public void setForfaitActif(boolean forfaitActif) {
+        this.forfaitActif = forfaitActif;
+    }
+
+    public Date getForfaitExpiration() {
+        return forfaitExpiration;
+    }
+
+    public void setForfaitExpiration(Date forfaitExpiration) {
+        this.forfaitExpiration = forfaitExpiration;
+    }
+
+    @Override
+    public String toString() {
+        return "Carte{" +
+                "id=" + id +
+                ", rfid='" + rfid + '\'' +
+                ", dateCreation=" + dateCreation +
+                ", dateExpiration=" + dateExpiration +
+                ", nomAgent='" + nomAgent + '\'' +
+                ", active=" + active +
+                ", forfaitActif=" + forfaitActif +
+                ", forfaitExpiration=" + forfaitExpiration +
+                '}';
     }
 }

@@ -1,4 +1,5 @@
 package com.bus.trans.controller;
+
 import com.bus.trans.dto.ForfaitDTO;
 import com.bus.trans.model.Forfait;
 import com.bus.trans.service.ForfaitService;
@@ -15,17 +16,17 @@ public class ForfaitController {
     @Autowired
     private ForfaitService forfaitService;
 
-    // Récupérer l'historique des forfaits d'un client
-    @GetMapping("/historique/{clientId}")
-    public ResponseEntity<List<ForfaitDTO>> getForfaitHistory(@PathVariable Long clientId) {
-        List<ForfaitDTO> forfaits = forfaitService.getForfaitHistory(clientId);
+    // Récupérer l'historique des forfaits d'une carte
+    @GetMapping("/historique/{carteId}")
+    public ResponseEntity<List<ForfaitDTO>> getForfaitHistory(@PathVariable Long carteId) {
+        List<ForfaitDTO> forfaits = forfaitService.getForfaitHistory(carteId);
         if (forfaits.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(forfaits);
     }
 
-    // Créer un nouveau forfait pour un client
+    // Créer un nouveau forfait pour une carte
     @PostMapping
     public ResponseEntity<Forfait> createForfait(@RequestBody ForfaitDTO forfaitDTO) {
         Forfait forfait = forfaitService.createForfait(forfaitDTO);
@@ -39,7 +40,7 @@ public class ForfaitController {
         return ResponseEntity.noContent().build();
     }
 
-    // Récupérer le statut d'un forfait par RFID
+    // Récupérer le statut d'un forfait par RFID de la carte
     @GetMapping("/status/{rfid}")
     public ResponseEntity<ForfaitDTO> getForfaitStatusByRFID(@PathVariable String rfid) {
         ForfaitDTO forfaitDTO = forfaitService.getForfaitStatusByRFID(rfid);
