@@ -4,10 +4,10 @@ import com.bus.trans.dto.ClientDTO;
 import com.bus.trans.model.Carte;
 import com.bus.trans.model.Client;
 import com.bus.trans.service.ClientService;
-
 import com.bus.trans.util.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -56,5 +56,35 @@ public class ClientController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé pour ce RFID");
         }
         return client;
+    }
+
+    // Créer un nouveau client
+    @PostMapping
+    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
+        try {
+            // Convertir le DTO en entité Client
+            Client newClient = clientService.createClient(DTOConverter.convertToClient(clientDTO));
+
+            // Retourner la réponse avec le DTO du client créé
+            return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    // Mettre à jour un client existant
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+        try {
+            // Convertir le DTO en entité Client et effectuer la mise à jour
+            Client updatedClient = clientService.updateClient(id, DTOConverter.convertToClient(clientDTO));
+
+            // Retourner la réponse avec le DTO du client mis à jour
+            return ResponseEntity.ok(DTOConverter.convertToClientDTO(updatedClient));
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé");
+        }
     }
 }

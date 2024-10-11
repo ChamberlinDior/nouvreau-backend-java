@@ -30,6 +30,27 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    // Méthode pour créer un client
+    public Client createClient(Client client) {
+        return clientRepository.save(client);
+    }
+
+    // Méthode pour mettre à jour un client existant
+    public Client updateClient(Long id, Client clientDetails) {
+        Optional<Client> clientOptional = clientRepository.findById(id);
+        if (clientOptional.isPresent()) {
+            Client client = clientOptional.get();
+            client.setNom(clientDetails.getNom());
+            client.setPrenom(clientDetails.getPrenom());
+            client.setQuartier(clientDetails.getQuartier());
+            client.setVille(clientDetails.getVille());
+            client.setNomAgent(clientDetails.getNomAgent());
+            return clientRepository.save(client);
+        } else {
+            throw new IllegalArgumentException("Client non trouvé avec l'ID fourni");
+        }
+    }
+
     // Obtenir un client par ID
     public Client getClientById(Long id) {
         return clientRepository.findById(id).orElse(null);
