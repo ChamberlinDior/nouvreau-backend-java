@@ -1,4 +1,5 @@
 package com.bus.trans.service;
+
 import com.bus.trans.model.Utilisateur;
 import com.bus.trans.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id).orElse(null);
     }
 
-    public Utilisateur getUtilisateurByUniqueUserNumber(String uniqueUserNumber) {
-        return utilisateurRepository.findByUniqueUserNumber(uniqueUserNumber).orElse(null);
+    public Utilisateur getUtilisateurByRfid(String rfid) {
+        return utilisateurRepository.findByRfid(rfid).orElse(null);
     }
 
     public Utilisateur updateUtilisateur(Long id, Utilisateur utilisateurDetails) {
@@ -35,6 +36,7 @@ public class UtilisateurService {
             utilisateur.setNom(utilisateurDetails.getNom());
             utilisateur.setPrenom(utilisateurDetails.getPrenom());
             utilisateur.setRole(utilisateurDetails.getRole());
+            utilisateur.setRfid(utilisateurDetails.getRfid());
             return utilisateurRepository.save(utilisateur);
         }
         return null;

@@ -9,20 +9,10 @@ public class UtilisateurDTO {
     private String nom;
     private String prenom;
     private String role;
+    private String rfid;  // Ajout du champ RFID
     private Date dateCreation;
-    private String lastDestination;
-
-    public String getLastDestination() {
-        return lastDestination;
-    }
-
-    public void setLastDestination(String lastDestination) {
-        this.lastDestination = lastDestination;
-    }
-
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -61,6 +51,14 @@ public class UtilisateurDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getRfid() {
+        return rfid;
+    }
+
+    public void setRfid(String rfid) {
+        this.rfid = rfid;
     }
 
     public Date getDateCreation() {

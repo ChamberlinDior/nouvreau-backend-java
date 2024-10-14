@@ -23,6 +23,9 @@ public class Utilisateur {
     @Column(nullable = false)
     private String role;
 
+    @Column(nullable = true, unique = true)  // Ajout du champ RFID
+    private String rfid;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateCreation;
@@ -37,7 +40,6 @@ public class Utilisateur {
     }
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -76,6 +78,14 @@ public class Utilisateur {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getRfid() {
+        return rfid;
+    }
+
+    public void setRfid(String rfid) {
+        this.rfid = rfid;
     }
 
     public Date getDateCreation() {

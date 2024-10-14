@@ -1,4 +1,5 @@
 package com.bus.trans.controller;
+
 import com.bus.trans.model.Utilisateur;
 import com.bus.trans.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,9 @@ public class UtilisateurController {
         return utilisateurService.getUtilisateurById(id);
     }
 
-    @GetMapping("/unique/{uniqueUserNumber}")
-    public Utilisateur getUtilisateurByUniqueUserNumber(@PathVariable String uniqueUserNumber) {
-        return utilisateurService.getUtilisateurByUniqueUserNumber(uniqueUserNumber);
+    @GetMapping("/rfid/{rfid}")
+    public Utilisateur getUtilisateurByRfid(@PathVariable String rfid) {
+        return utilisateurService.getUtilisateurByRfid(rfid);
     }
 
     @PutMapping("/{id}")
