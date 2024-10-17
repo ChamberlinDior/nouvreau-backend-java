@@ -14,7 +14,6 @@ public class DTOConverter {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    // Convertir Client en ClientDTO
     public static ClientDTO convertToClientDTO(Client client) {
         ClientDTO clientDTO = new ClientDTO();
         clientDTO.setId(client.getId());
@@ -29,7 +28,6 @@ public class DTOConverter {
         return clientDTO;
     }
 
-    // Convertir ClientDTO en Client
     public static Client convertToClient(ClientDTO clientDTO) {
         Client client = new Client();
         client.setId(clientDTO.getId());

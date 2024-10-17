@@ -1,7 +1,5 @@
 package com.bus.trans.dto;
 
-import java.util.Date;
-
 public class CarteDTO {
 
     private Long id;
@@ -10,12 +8,10 @@ public class CarteDTO {
     private String dateExpiration;
     private String nomAgent;
     private boolean active;
-
-    // Ajout des nouvelles propriétés
     private boolean forfaitActif;
-    private String forfaitExpiration;  // Représentation de la date d'expiration du forfait
+    private String forfaitExpiration;
 
-    // Getters et Setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -64,7 +60,6 @@ public class CarteDTO {
         this.active = active;
     }
 
-    // Getters et Setters pour les nouvelles propriétés
     public boolean isForfaitActif() {
         return forfaitActif;
     }
@@ -81,7 +76,6 @@ public class CarteDTO {
         this.forfaitExpiration = forfaitExpiration;
     }
 
-    // toString pour aider au débogage
     @Override
     public String toString() {
         return "CarteDTO{" +

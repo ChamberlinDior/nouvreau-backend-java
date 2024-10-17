@@ -12,7 +12,7 @@ public class ClientDTO {
     private String ville;
     private String dateCreation;
     private String nomAgent;
-    private List<CarteDTO> cartes;  // Liste des cartes associées à ce client
+    private List<CarteDTO> cartes;
 
     // Getters and Setters
     public Long getId() {

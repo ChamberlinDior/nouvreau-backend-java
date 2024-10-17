@@ -12,38 +12,37 @@ public class Carte {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String rfid;  // Chaque carte aura un RFID unique
+    private String rfid;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date dateCreation;  // Date de création de la carte
+    private Date dateCreation;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateExpiration;  // Date d'expiration de la carte
+    private Date dateExpiration;
 
     @Column(nullable = false)
-    private String nomAgent;  // Nom de l'agent ayant délivré la carte
+    private String nomAgent;
 
     @Column(nullable = false)
-    private boolean active;  // Statut de la carte (active ou non)
+    private boolean active;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Client client;  // Association avec le client
+    private Client client;
 
-    // Ajout des propriétés forfaitActif et forfaitExpiration
     @Column(nullable = false)
-    private boolean forfaitActif;  // Statut du forfait (actif ou inactif)
+    private boolean forfaitActif;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date forfaitExpiration;  // Date d'expiration du forfait
+    private Date forfaitExpiration;
 
     public Carte() {
         this.rfid = "RFID-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         this.nomAgent = "Agent-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
         this.dateCreation = new Date();
-        this.active = true;  // Par défaut, la carte est active
-        this.forfaitActif = false;  // Par défaut, aucun forfait n'est actif
+        this.active = true;
+        this.forfaitActif = false;
     }
 
     // Getters et Setters pour toutes les propriétés
@@ -103,8 +102,6 @@ public class Carte {
     public void setClient(Client client) {
         this.client = client;
     }
-
-    // Getters et Setters pour les nouveaux champs forfaitActif et forfaitExpiration
 
     public boolean isForfaitActif() {
         return forfaitActif;

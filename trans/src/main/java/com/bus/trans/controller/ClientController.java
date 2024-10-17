@@ -18,7 +18,6 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-    // Obtenir un client par son ID et retourner un DTO
     @GetMapping("/{id}")
     public ClientDTO getClientById(@PathVariable Long id) {
         Client client = clientService.getClientById(id);
@@ -28,7 +27,6 @@ public class ClientController {
         return DTOConverter.convertToClientDTO(client);
     }
 
-    // Ajouter une carte à un client
     @PostMapping("/{clientId}/cartes")
     public Carte addCarteToClient(@PathVariable Long clientId, @RequestBody Carte carte) {
         Carte newCarte = clientService.addCarteToClient(clientId, carte);
@@ -38,7 +36,6 @@ public class ClientController {
         return newCarte;
     }
 
-    // Mettre à jour une carte (désactiver ou activer)
     @PutMapping("/cartes/{carteId}")
     public Carte updateCarte(@PathVariable Long carteId, @RequestBody Carte carteDetails) {
         Carte updatedCarte = clientService.updateCarte(carteId, carteDetails);
@@ -48,7 +45,6 @@ public class ClientController {
         return updatedCarte;
     }
 
-    // Obtenir un client par son RFID
     @GetMapping("/rfid/{rfid}")
     public Client getClientByRFID(@PathVariable String rfid) {
         Client client = clientService.getClientByRFID(rfid);
@@ -58,28 +54,20 @@ public class ClientController {
         return client;
     }
 
-    // Créer un nouveau client
     @PostMapping
     public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
         try {
-            // Convertir le DTO en entité Client
             Client newClient = clientService.createClient(DTOConverter.convertToClient(clientDTO));
-
-            // Retourner la réponse avec le DTO du client créé
             return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    // Mettre à jour un client existant
     @PutMapping("/{id}")
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
         try {
-            // Convertir le DTO en entité Client et effectuer la mise à jour
             Client updatedClient = clientService.updateClient(id, DTOConverter.convertToClient(clientDTO));
-
-            // Retourner la réponse avec le DTO du client mis à jour
             return ResponseEntity.ok(DTOConverter.convertToClientDTO(updatedClient));
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

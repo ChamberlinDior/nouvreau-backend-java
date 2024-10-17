@@ -13,7 +13,7 @@ public class Client {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String numClient;  // Numéro de client unique
+    private String numClient;
 
     @Column(nullable = false)
     private String nom;
@@ -25,14 +25,14 @@ public class Client {
     private String ville;
 
     @Column(nullable = false)
-    private String nomAgent;  // Nom de l'agent ayant créé le client
+    private String nomAgent;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateCreation;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Carte> cartes;  // Liste de cartes associées à ce client
+    private List<Carte> cartes;
 
     public Client() {
         this.numClient = "CLT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
