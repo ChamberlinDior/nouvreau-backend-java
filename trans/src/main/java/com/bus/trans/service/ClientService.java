@@ -7,7 +7,6 @@ import com.bus.trans.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,22 +19,18 @@ public class ClientService {
     @Autowired
     private CarteRepository carteRepository;
 
-    // Obtenir tous les clients
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
-    // Sauvegarder un nouveau client
     public Client saveClient(Client client) {
         return clientRepository.save(client);
     }
 
-    // Méthode pour créer un client
     public Client createClient(Client client) {
         return clientRepository.save(client);
     }
 
-    // Méthode pour mettre à jour un client existant
     public Client updateClient(Long id, Client clientDetails) {
         Optional<Client> clientOptional = clientRepository.findById(id);
         if (clientOptional.isPresent()) {
@@ -51,18 +46,15 @@ public class ClientService {
         }
     }
 
-    // Obtenir un client par ID
     public Client getClientById(Long id) {
         return clientRepository.findById(id).orElse(null);
     }
 
-    // Obtenir un client par RFID
     public Client getClientByRFID(String rfid) {
         Optional<Carte> carte = carteRepository.findByRfid(rfid);
         return carte.map(Carte::getClient).orElse(null);
     }
 
-    // Ajouter une nouvelle carte à un client existant
     public Carte addCarteToClient(Long clientId, Carte carte) {
         Client client = getClientById(clientId);
         if (client != null) {
@@ -72,7 +64,6 @@ public class ClientService {
         return null;
     }
 
-    // Mise à jour d'une carte (désactivation ou changement de date de validité)
     public Carte updateCarte(Long carteId, Carte carteDetails) {
         Optional<Carte> carteOptional = carteRepository.findById(carteId);
         if (carteOptional.isPresent()) {
