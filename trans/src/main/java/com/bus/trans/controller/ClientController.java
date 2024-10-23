@@ -83,7 +83,7 @@ public class ClientController {
         }
     }
 
-    // Nouvelle route pour lister toutes les cartes créées
+    // Nouvelle route pour lister toutes les cartes
     @GetMapping("/cartes")
     public ResponseEntity<List<CarteDTO>> getAllCartes() {
         List<Carte> cartes = clientService.getAllCartes();
