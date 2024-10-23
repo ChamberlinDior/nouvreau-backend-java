@@ -12,7 +12,7 @@ public class ClientDTO {
     private String ville;
     private String dateCreation;
     private String nomAgent;
-    private List<CarteDTO> cartes;
+    private List<CarteDTO> cartes; // Liste des cartes associées
 
     // Getters and Setters
     public Long getId() {
@@ -85,5 +85,20 @@ public class ClientDTO {
 
     public void setCartes(List<CarteDTO> cartes) {
         this.cartes = cartes;
+    }
+
+    @Override
+    public String toString() {
+        return "ClientDTO{" +
+                "id=" + id +
+                ", numClient='" + numClient + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", quartier='" + quartier + '\'' +
+                ", ville='" + ville + '\'' +
+                ", dateCreation='" + dateCreation + '\'' +
+                ", nomAgent='" + nomAgent + '\'' +
+                ", cartes=" + cartes +
+                '}';
     }
 }

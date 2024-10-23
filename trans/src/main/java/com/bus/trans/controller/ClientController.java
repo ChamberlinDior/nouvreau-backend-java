@@ -29,12 +29,12 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ClientDTO getClientById(@PathVariable Long id) {
+    public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
         Client client = clientService.getClientById(id);
         if (client == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé");
         }
-        return DTOConverter.convertToClientDTO(client);
+        return ResponseEntity.ok(DTOConverter.convertToClientDTO(client));
     }
 
     @PostMapping("/{clientId}/cartes")
@@ -46,21 +46,22 @@ public class ClientController {
     }
 
     @PutMapping("/cartes/{carteId}")
-    public Carte updateCarte(@PathVariable Long carteId, @RequestBody Carte carteDetails) {
-        Carte updatedCarte = clientService.updateCarte(carteId, carteDetails);
+    public ResponseEntity<CarteDTO> updateCarte(@PathVariable Long carteId, @RequestBody CarteDTO carteDetails) {
+        Carte updatedCarte = clientService.updateCarte(carteId, DTOConverter.convertToCarte(carteDetails));
         if (updatedCarte == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Carte non trouvée");
         }
-        return updatedCarte;
+        return ResponseEntity.ok(DTOConverter.convertToCarteDTO(updatedCarte));
     }
 
     @GetMapping("/rfid/{rfid}")
-    public Client getClientByRFID(@PathVariable String rfid) {
+    public ResponseEntity<ClientDTO> getClientByRFID(@PathVariable String rfid) {
         Client client = clientService.getClientByRFID(rfid);
         if (client == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé pour ce RFID");
         }
-        return client;
+        // Convert to DTO to avoid circular references
+        return ResponseEntity.ok(DTOConverter.convertToClientDTO(client));
     }
 
     @PostMapping
