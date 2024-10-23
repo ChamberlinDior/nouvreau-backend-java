@@ -20,7 +20,6 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-    // Nouvelle route pour récupérer tous les clients
     @GetMapping
     public ResponseEntity<List<ClientDTO>> getAllClients() {
         List<Client> clients = clientService.getAllClients();
@@ -66,11 +65,15 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
-        try {
-            Client newClient = clientService.createClient(DTOConverter.convertToClient(clientDTO));
+        Client client = DTOConverter.convertToClient(clientDTO);
+        if (client.getCartes() == null || client.getCartes().isEmpty()) {
+            // Enregistrer le client même sans cartes
+            Client newClient = clientService.createClient(client);
             return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } else {
+            // Enregistrer le client avec cartes
+            Client newClient = clientService.createClient(client);
+            return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
         }
     }
 

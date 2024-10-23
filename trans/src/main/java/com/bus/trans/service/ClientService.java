@@ -23,10 +23,6 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Client saveClient(Client client) {
-        return clientRepository.save(client);
-    }
-
     public Client createClient(Client client) {
         return clientRepository.save(client);
     }
