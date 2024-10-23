@@ -59,4 +59,9 @@ public class DTOConverter {
         carteDTO.setActive(carte.isActive());
         return carteDTO;
     }
+
+    // Nouvelle méthode pour convertir une liste de clients en ClientDTOs
+    public static List<ClientDTO> convertToClientDTOs(List<Client> clients) {
+        return clients.stream().map(DTOConverter::convertToClientDTO).collect(Collectors.toList());
+    }
 }

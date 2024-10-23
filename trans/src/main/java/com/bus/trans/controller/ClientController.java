@@ -11,12 +11,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    // Nouvelle route pour récupérer tous les clients
+    @GetMapping
+    public ResponseEntity<List<ClientDTO>> getAllClients() {
+        List<Client> clients = clientService.getAllClients();
+        List<ClientDTO> clientDTOs = DTOConverter.convertToClientDTOs(clients);
+        return ResponseEntity.ok(clientDTOs);
+    }
 
     @GetMapping("/{id}")
     public ClientDTO getClientById(@PathVariable Long id) {
