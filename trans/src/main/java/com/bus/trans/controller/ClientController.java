@@ -38,12 +38,14 @@ public class ClientController {
     }
 
     @PostMapping("/{clientId}/cartes")
-    public Carte addCarteToClient(@PathVariable Long clientId, @RequestBody Carte carte) {
+    public ResponseEntity<CarteDTO> addCarteToClient(@PathVariable Long clientId, @RequestBody CarteDTO carteDTO) {
+        Carte carte = DTOConverter.convertToCarte(carteDTO);
         Carte newCarte = clientService.addCarteToClient(clientId, carte);
-        if (newCarte == null) {
+        if (newCarte != null) {
+            return ResponseEntity.ok(DTOConverter.convertToCarteDTO(newCarte));
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé");
         }
-        return newCarte;
     }
 
     @PutMapping("/cartes/{carteId}")
@@ -83,7 +85,6 @@ public class ClientController {
         }
     }
 
-    // Nouvelle route pour lister toutes les cartes
     @GetMapping("/cartes")
     public ResponseEntity<List<CarteDTO>> getAllCartes() {
         List<Carte> cartes = clientService.getAllCartes();

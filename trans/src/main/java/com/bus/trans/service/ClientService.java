@@ -56,8 +56,9 @@ public class ClientService {
         if (client != null) {
             carte.setClient(client);
             return carteRepository.save(carte);
+        } else {
+            throw new IllegalArgumentException("Client non trouvé avec l'ID fourni.");
         }
-        return null;
     }
 
     public Carte updateCarte(Long carteId, Carte carteDetails) {
@@ -71,7 +72,6 @@ public class ClientService {
         return null;
     }
 
-    // Nouvelle méthode pour obtenir toutes les cartes
     public List<Carte> getAllCartes() {
         return carteRepository.findAll();
     }
