@@ -70,4 +70,9 @@ public class ClientService {
         }
         return null;
     }
+
+    // Nouvelle méthode pour obtenir toutes les cartes
+    public List<Carte> getAllCartes() {
+        return carteRepository.findAll();
+    }
 }

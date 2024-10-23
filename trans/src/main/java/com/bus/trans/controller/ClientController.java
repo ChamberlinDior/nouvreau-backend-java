@@ -1,5 +1,6 @@
 package com.bus.trans.controller;
 
+import com.bus.trans.dto.CarteDTO;
 import com.bus.trans.dto.ClientDTO;
 import com.bus.trans.model.Carte;
 import com.bus.trans.model.Client;
@@ -66,15 +67,8 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
         Client client = DTOConverter.convertToClient(clientDTO);
-        if (client.getCartes() == null || client.getCartes().isEmpty()) {
-            // Enregistrer le client même sans cartes
-            Client newClient = clientService.createClient(client);
-            return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
-        } else {
-            // Enregistrer le client avec cartes
-            Client newClient = clientService.createClient(client);
-            return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
-        }
+        Client newClient = clientService.createClient(client);
+        return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -87,5 +81,13 @@ public class ClientController {
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé");
         }
+    }
+
+    // Nouvelle route pour lister toutes les cartes créées
+    @GetMapping("/cartes")
+    public ResponseEntity<List<CarteDTO>> getAllCartes() {
+        List<Carte> cartes = clientService.getAllCartes();
+        List<CarteDTO> carteDTOs = DTOConverter.convertToCarteDTOs(cartes);
+        return ResponseEntity.ok(carteDTOs);
     }
 }
