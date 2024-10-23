@@ -40,12 +40,9 @@ public class ClientController {
     @PostMapping("/{clientId}/cartes")
     public ResponseEntity<CarteDTO> addCarteToClient(@PathVariable Long clientId, @RequestBody CarteDTO carteDTO) {
         Carte carte = DTOConverter.convertToCarte(carteDTO);
+        carte.setClient(clientService.getClientById(clientId));  // Associe le client à la carte
         Carte newCarte = clientService.addCarteToClient(clientId, carte);
-        if (newCarte != null) {
-            return ResponseEntity.ok(DTOConverter.convertToCarteDTO(newCarte));
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé");
-        }
+        return ResponseEntity.ok(DTOConverter.convertToCarteDTO(newCarte));
     }
 
     @PutMapping("/cartes/{carteId}")

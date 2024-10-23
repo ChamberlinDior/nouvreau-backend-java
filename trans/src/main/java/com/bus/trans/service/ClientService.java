@@ -24,6 +24,12 @@ public class ClientService {
     }
 
     public Client createClient(Client client) {
+        // Associe chaque carte au client avant de sauvegarder
+        if (client.getCartes() != null) {
+            for (Carte carte : client.getCartes()) {
+                carte.setClient(client);  // Définit l'association
+            }
+        }
         return clientRepository.save(client);
     }
 
@@ -36,6 +42,12 @@ public class ClientService {
             client.setQuartier(clientDetails.getQuartier());
             client.setVille(clientDetails.getVille());
             client.setNomAgent(clientDetails.getNomAgent());
+            // Mettre à jour les cartes associées
+            if (clientDetails.getCartes() != null) {
+                for (Carte carte : clientDetails.getCartes()) {
+                    carte.setClient(client);  // Définit l'association
+                }
+            }
             return clientRepository.save(client);
         } else {
             throw new IllegalArgumentException("Client non trouvé avec l'ID fourni");
@@ -54,7 +66,7 @@ public class ClientService {
     public Carte addCarteToClient(Long clientId, Carte carte) {
         Client client = getClientById(clientId);
         if (client != null) {
-            carte.setClient(client);
+            carte.setClient(client);  // Associe le client à la carte
             return carteRepository.save(carte);
         } else {
             throw new IllegalArgumentException("Client non trouvé avec l'ID fourni.");
@@ -67,6 +79,7 @@ public class ClientService {
             Carte carte = carteOptional.get();
             carte.setActive(carteDetails.isActive());
             carte.setDateExpiration(carteDetails.getDateExpiration());
+            carte.setClient(carteDetails.getClient());  // Associe le client si nécessaire
             return carteRepository.save(carte);
         }
         return null;
