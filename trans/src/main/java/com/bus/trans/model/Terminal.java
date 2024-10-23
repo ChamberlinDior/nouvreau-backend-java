@@ -1,11 +1,24 @@
-package com.bus.trans.dto;
+package com.bus.trans.model;
 
-public class TerminalDTO {
+import jakarta.persistence.*;
 
+@Entity
+public class Terminal {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String terminalId;
+
+    @Column(nullable = false)
     private String typeTerminal;
+
+    @Column(nullable = false, unique = true)
     private String macAddress;
+
+    @Column(nullable = true)
     private String busMatricule;
 
     // Getters et Setters
@@ -36,4 +49,17 @@ public class TerminalDTO {
 
     public String getMacAddress() {
         return macAddress;
-    }}
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    public String getBusMatricule() {
+        return busMatricule;
+    }
+
+    public void setBusMatricule(String busMatricule) {
+        this.busMatricule = busMatricule;
+    }
+}

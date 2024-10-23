@@ -1,6 +1,8 @@
 package com.bus.trans.controller;
 
+
 import com.bus.trans.model.Bus;
+import com.bus.trans.model.BusChangeLog;
 import com.bus.trans.service.BusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +28,7 @@ public class BusController {
     @GetMapping("/mac/{macAddress}")
     public ResponseEntity<Bus> getBusByMacAddress(@PathVariable String macAddress) {
         Bus bus = busService.getBusByMacAddress(macAddress);
-        if (bus != null) {
-            return ResponseEntity.ok(bus);
-        }
-        return ResponseEntity.notFound().build();
+        return bus != null ? ResponseEntity.ok(bus) : ResponseEntity.notFound().build();
     }
 
     // Créer un nouveau bus
@@ -43,6 +42,41 @@ public class BusController {
         }
     }
 
+    // Mise à jour individuelle du matricule
+    @PatchMapping("/{busId}/matricule")
+    public ResponseEntity<?> updateMatricule(@PathVariable Long busId, @RequestParam String matricule) {
+        try {
+            Bus updatedBus = busService.updateMatricule(busId, matricule);
+            return ResponseEntity.ok(updatedBus);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la mise à jour du matricule : " + e.getMessage());
+        }
+    }
+
+    // Mise à jour individuelle du modèle
+    @PatchMapping("/{busId}/modele")
+    public ResponseEntity<?> updateModele(@PathVariable Long busId, @RequestParam String modele) {
+        try {
+            Bus updatedBus = busService.updateModele(busId, modele);
+            return ResponseEntity.ok(updatedBus);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la mise à jour du modèle : " + e.getMessage());
+        }
+    }
+
+    // Mise à jour individuelle de la marque
+    @PatchMapping("/{busId}/marque")
+    public ResponseEntity<?> updateMarque(@PathVariable Long busId, @RequestParam String marque) {
+        try {
+            Bus updatedBus = busService.updateMarque(busId, marque);
+            return ResponseEntity.ok(updatedBus);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la mise à jour de la marque : " + e.getMessage());
+        }
+    }
+
+    // Ajoutez d'autres méthodes similaires pour chaque champ (adresse MAC, niveau de batterie, etc.)
+
     // Mettre à jour le chauffeur et la destination par adresse MAC
     @PostMapping("/mac/{macAddress}/update-chauffeur-destination")
     public ResponseEntity<?> updateChauffeurAndDestinationByMac(
@@ -51,31 +85,21 @@ public class BusController {
             @RequestParam String chauffeurNom,
             @RequestParam String chauffeurUniqueNumber) {
         Bus bus = busService.updateChauffeurAndDestinationByMacAddress(macAddress, lastDestination, chauffeurNom, chauffeurUniqueNumber);
-        if (bus != null) {
-            return ResponseEntity.ok("Chauffeur et destination mis à jour avec succès.");
-        }
-        return ResponseEntity.notFound().build();
+        return bus != null ? ResponseEntity.ok("Chauffeur et destination mis à jour avec succès.") : ResponseEntity.notFound().build();
     }
 
     // Démarrer un trajet par adresse MAC
     @PostMapping("/mac/{macAddress}/start-trip")
-    public ResponseEntity<?> startTrip(@PathVariable String macAddress,
-                                       @RequestParam String lastDestination) {
+    public ResponseEntity<?> startTrip(@PathVariable String macAddress, @RequestParam String lastDestination) {
         Bus bus = busService.startTrip(macAddress, lastDestination);
-        if (bus != null) {
-            return ResponseEntity.ok("Trajet démarré avec succès.");
-        }
-        return ResponseEntity.notFound().build();
+        return bus != null ? ResponseEntity.ok("Trajet démarré avec succès.") : ResponseEntity.notFound().build();
     }
 
     // Terminer un trajet par adresse MAC
     @PostMapping("/mac/{macAddress}/end-trip")
     public ResponseEntity<?> endTrip(@PathVariable String macAddress) {
         Bus bus = busService.endTrip(macAddress);
-        if (bus != null) {
-            return ResponseEntity.ok("Trajet terminé avec succès.");
-        }
-        return ResponseEntity.notFound().build();
+        return bus != null ? ResponseEntity.ok("Trajet terminé avec succès.") : ResponseEntity.notFound().build();
     }
 
     // Mettre à jour le niveau de batterie et l'état de charge
@@ -86,9 +110,13 @@ public class BusController {
             @RequestParam boolean isCharging) {
 
         Bus bus = busService.updateBatteryLevel(macAddress, niveauBatterie, isCharging);
-        if (bus != null) {
-            return ResponseEntity.ok("Niveau de batterie et état de charge mis à jour avec succès.");
-        }
-        return ResponseEntity.notFound().build();
+        return bus != null ? ResponseEntity.ok("Niveau de batterie et état de charge mis à jour avec succès.") : ResponseEntity.notFound().build();
+    }
+
+    // Récupérer l'historique des changements de chauffeur et de destination
+    @GetMapping("/mac/{macAddress}/history")
+    public ResponseEntity<List<BusChangeLog>> getBusChangeLogByMac(@PathVariable String macAddress) {
+        List<BusChangeLog> logs = busService.getBusChangeLogByMacAddress(macAddress);
+        return ResponseEntity.ok(logs);
     }
 }

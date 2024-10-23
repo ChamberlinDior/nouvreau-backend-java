@@ -1,5 +1,7 @@
 package com.bus.trans.model;
+
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -9,26 +11,26 @@ public class Bus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String modele;
 
     @Column(nullable = false, unique = true)
     private String matricule;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String marque;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = false)
     private String macAddress;
 
-    @Column(nullable = true, unique = true)
+    @Column(nullable = true, unique = false)
     private String ipAddress;
 
     @Column(name = "niveau_batterie", nullable = true)
-    private Integer niveauBatterie; // Nouveau champ pour le niveau de batterie
+    private Integer niveauBatterie;
 
-    @Column(name = "is_charging", nullable = false)
-    private boolean isCharging; // Nouveau champ pour savoir si le bus est en charge
+    @Column(name = "is_charging", nullable = true)
+    private boolean isCharging;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "debut_trajet")

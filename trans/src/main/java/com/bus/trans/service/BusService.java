@@ -1,12 +1,14 @@
 package com.bus.trans.service;
 
 
-
 import com.bus.trans.model.Bus;
+import com.bus.trans.model.BusChangeLog;
+import com.bus.trans.repository.BusChangeLogRepository;
 import com.bus.trans.repository.BusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -14,6 +16,9 @@ public class BusService {
 
     @Autowired
     private BusRepository busRepository;
+
+    @Autowired
+    private BusChangeLogRepository busChangeLogRepository;
 
     // Récupérer tous les bus
     public List<Bus> getAllBuses() {
@@ -30,6 +35,30 @@ public class BusService {
         return busRepository.findByMacAddress(macAddress);
     }
 
+    // Mise à jour du matricule
+    public Bus updateMatricule(Long busId, String matricule) {
+        Bus bus = busRepository.findById(busId).orElseThrow(() ->
+                new IllegalArgumentException("Bus introuvable"));
+        bus.setMatricule(matricule);
+        return busRepository.save(bus);
+    }
+
+    // Mise à jour du modèle
+    public Bus updateModele(Long busId, String modele) {
+        Bus bus = busRepository.findById(busId).orElseThrow(() ->
+                new IllegalArgumentException("Bus introuvable"));
+        bus.setModele(modele);
+        return busRepository.save(bus);
+    }
+
+    // Mise à jour de la marque
+    public Bus updateMarque(Long busId, String marque) {
+        Bus bus = busRepository.findById(busId).orElseThrow(() ->
+                new IllegalArgumentException("Bus introuvable"));
+        bus.setMarque(marque);
+        return busRepository.save(bus);
+    }
+
     // Mettre à jour le chauffeur et la destination
     public Bus updateChauffeurAndDestinationByMacAddress(String macAddress, String lastDestination, String chauffeurNom, String chauffeurUniqueNumber) {
         Bus bus = busRepository.findByMacAddress(macAddress);
@@ -37,7 +66,9 @@ public class BusService {
             bus.setLastDestination(lastDestination);
             bus.setChauffeurNom(chauffeurNom);
             bus.setChauffeurUniqueNumber(chauffeurUniqueNumber);
-            return busRepository.save(bus);
+            Bus updatedBus = busRepository.save(bus);
+            saveChangeLog(macAddress, chauffeurNom, chauffeurUniqueNumber, lastDestination, bus.getDebutTrajet());
+            return updatedBus;
         }
         return null;
     }
@@ -46,9 +77,12 @@ public class BusService {
     public Bus startTrip(String macAddress, String lastDestination) {
         Bus bus = busRepository.findByMacAddress(macAddress);
         if (bus != null) {
-            bus.setDebutTrajet(new java.util.Date());
+            Date now = new Date();
+            bus.setDebutTrajet(now);
             bus.setLastDestination(lastDestination);
-            return busRepository.save(bus);
+            Bus updatedBus = busRepository.save(bus);
+            saveChangeLog(macAddress, bus.getChauffeurNom(), bus.getChauffeurUniqueNumber(), lastDestination, now);
+            return updatedBus;
         }
         return null;
     }
@@ -57,7 +91,7 @@ public class BusService {
     public Bus endTrip(String macAddress) {
         Bus bus = busRepository.findByMacAddress(macAddress);
         if (bus != null) {
-            bus.setFinTrajet(new java.util.Date());
+            bus.setFinTrajet(new Date());
             return busRepository.save(bus);
         }
         return null;
@@ -68,9 +102,26 @@ public class BusService {
         Bus bus = busRepository.findByMacAddress(macAddress);
         if (bus != null) {
             bus.setNiveauBatterie(niveauBatterie);
-            bus.setCharging(isCharging);  // Mise à jour de l'état de charge
+            bus.setCharging(isCharging);
             return busRepository.save(bus);
         }
         return null;
+    }
+
+    // Récupérer les logs d'un bus par son adresse MAC
+    public List<BusChangeLog> getBusChangeLogByMacAddress(String macAddress) {
+        return busChangeLogRepository.findByBusMacAddress(macAddress);
+    }
+
+    // Enregistrer un log de changement
+    private void saveChangeLog(String macAddress, String chauffeurNom, String chauffeurUniqueNumber, String destination, Date debutTrajet) {
+        BusChangeLog changeLog = new BusChangeLog();
+        changeLog.setBusMacAddress(macAddress);
+        changeLog.setChauffeurNom(chauffeurNom);
+        changeLog.setChauffeurUniqueNumber(chauffeurUniqueNumber);
+        changeLog.setDestination(destination);
+        changeLog.setDateChange(new Date());
+        changeLog.setDebutTrajet(debutTrajet);
+        busChangeLogRepository.save(changeLog);
     }
 }
