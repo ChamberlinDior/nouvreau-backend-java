@@ -16,14 +16,12 @@ public class VehiculeController {
     @Autowired
     private VehiculeService vehiculeService;
 
-    // Récupérer tous les véhicules
     @GetMapping
     public ResponseEntity<List<Vehicule>> getAllVehicules() {
         List<Vehicule> vehicules = vehiculeService.getAllVehicules();
         return ResponseEntity.ok(vehicules);
     }
 
-    // Créer un nouveau véhicule
     @PostMapping("/create")
     public ResponseEntity<Vehicule> createVehicule(@RequestBody VehiculeDTO vehiculeDTO) {
         try {
@@ -32,6 +30,8 @@ public class VehiculeController {
             vehicule.setTrajet(vehiculeDTO.getTrajet());
             vehicule.setChauffeur(vehiculeDTO.getChauffeur());
             vehicule.setMacAddress(vehiculeDTO.getMacAddress());
+            vehicule.setMarque(vehiculeDTO.getMarque());
+            vehicule.setModele(vehiculeDTO.getModele());
 
             Vehicule newVehicule = vehiculeService.saveVehicule(vehicule);
             return ResponseEntity.ok(newVehicule);
@@ -40,27 +40,15 @@ public class VehiculeController {
         }
     }
 
-    // Récupérer un véhicule par immatriculation
-    @GetMapping("/immatriculation/{immatriculation}")
-    public ResponseEntity<Vehicule> getVehiculeByImmatriculation(@PathVariable String immatriculation) {
-        Vehicule vehicule = vehiculeService.getVehiculeByImmatriculation(immatriculation);
+    @GetMapping("/{id}")
+    public ResponseEntity<Vehicule> getVehiculeById(@PathVariable Long id) {
+        Vehicule vehicule = vehiculeService.getVehiculeById(id);
         if (vehicule != null) {
             return ResponseEntity.ok(vehicule);
         }
         return ResponseEntity.notFound().build();
     }
 
-    // Récupérer un véhicule par adresse MAC
-    @GetMapping("/mac/{macAddress}")
-    public ResponseEntity<Vehicule> getVehiculeByMacAddress(@PathVariable String macAddress) {
-        Vehicule vehicule = vehiculeService.getVehiculeByMacAddress(macAddress);
-        if (vehicule != null) {
-            return ResponseEntity.ok(vehicule);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    // Mettre à jour un véhicule
     @PutMapping("/immatriculation/{immatriculation}")
     public ResponseEntity<Vehicule> updateVehicule(@PathVariable String immatriculation, @RequestBody VehiculeDTO vehiculeDTO) {
         try {
@@ -68,6 +56,8 @@ public class VehiculeController {
             vehiculeDetails.setTrajet(vehiculeDTO.getTrajet());
             vehiculeDetails.setChauffeur(vehiculeDTO.getChauffeur());
             vehiculeDetails.setMacAddress(vehiculeDTO.getMacAddress());
+            vehiculeDetails.setMarque(vehiculeDTO.getMarque());
+            vehiculeDetails.setModele(vehiculeDTO.getModele());
 
             Vehicule updatedVehicule = vehiculeService.updateVehicule(immatriculation, vehiculeDetails);
             return ResponseEntity.ok(updatedVehicule);
@@ -76,7 +66,6 @@ public class VehiculeController {
         }
     }
 
-    // Supprimer un véhicule
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteVehicule(@PathVariable Long id) {
         vehiculeService.deleteVehicule(id);
