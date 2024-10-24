@@ -21,6 +21,7 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    // Route pour récupérer tous les clients
     @GetMapping
     public ResponseEntity<List<ClientDTO>> getAllClients() {
         List<Client> clients = clientService.getAllClients();
@@ -28,6 +29,7 @@ public class ClientController {
         return ResponseEntity.ok(clientDTOs);
     }
 
+    // Route pour récupérer un client par ID
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
         Client client = clientService.getClientById(id);
@@ -37,6 +39,7 @@ public class ClientController {
         return ResponseEntity.ok(DTOConverter.convertToClientDTO(client));
     }
 
+    // Route pour ajouter une carte à un client
     @PostMapping("/{clientId}/cartes")
     public ResponseEntity<CarteDTO> addCarteToClient(@PathVariable Long clientId, @RequestBody CarteDTO carteDTO) {
         Carte carte = DTOConverter.convertToCarte(carteDTO);
@@ -45,6 +48,7 @@ public class ClientController {
         return ResponseEntity.ok(DTOConverter.convertToCarteDTO(newCarte));
     }
 
+    // Route pour mettre à jour une carte
     @PutMapping("/cartes/{carteId}")
     public ResponseEntity<CarteDTO> updateCarte(@PathVariable Long carteId, @RequestBody CarteDTO carteDetails) {
         Carte updatedCarte = clientService.updateCarte(carteId, DTOConverter.convertToCarte(carteDetails));
@@ -54,16 +58,17 @@ public class ClientController {
         return ResponseEntity.ok(DTOConverter.convertToCarteDTO(updatedCarte));
     }
 
+    // Route pour récupérer un client par RFID
     @GetMapping("/rfid/{rfid}")
     public ResponseEntity<ClientDTO> getClientByRFID(@PathVariable String rfid) {
         Client client = clientService.getClientByRFID(rfid);
         if (client == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client non trouvé pour ce RFID");
         }
-        // Convert to DTO to avoid circular references
         return ResponseEntity.ok(DTOConverter.convertToClientDTO(client));
     }
 
+    // Route pour créer un nouveau client
     @PostMapping
     public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
         Client client = DTOConverter.convertToClient(clientDTO);
@@ -71,6 +76,7 @@ public class ClientController {
         return new ResponseEntity<>(DTOConverter.convertToClientDTO(newClient), HttpStatus.CREATED);
     }
 
+    // Route pour mettre à jour un client
     @PutMapping("/{id}")
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
         try {
@@ -83,10 +89,21 @@ public class ClientController {
         }
     }
 
+    // Route pour récupérer toutes les cartes
     @GetMapping("/cartes")
     public ResponseEntity<List<CarteDTO>> getAllCartes() {
         List<Carte> cartes = clientService.getAllCartes();
         List<CarteDTO> carteDTOs = DTOConverter.convertToCarteDTOs(cartes);
         return ResponseEntity.ok(carteDTOs);
+    }
+
+    // Route pour récupérer une carte par ID
+    @GetMapping("/cartes/{carteId}")
+    public ResponseEntity<CarteDTO> getCarteById(@PathVariable Long carteId) {
+        Carte carte = clientService.getCarteById(carteId);
+        if (carte == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Carte non trouvée");
+        }
+        return ResponseEntity.ok(DTOConverter.convertToCarteDTO(carte));
     }
 }

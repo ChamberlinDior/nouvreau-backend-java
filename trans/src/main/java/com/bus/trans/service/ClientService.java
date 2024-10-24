@@ -24,10 +24,9 @@ public class ClientService {
     }
 
     public Client createClient(Client client) {
-        // Associe chaque carte au client avant de sauvegarder
         if (client.getCartes() != null) {
             for (Carte carte : client.getCartes()) {
-                carte.setClient(client);  // Définit l'association
+                carte.setClient(client);
             }
         }
         return clientRepository.save(client);
@@ -42,10 +41,10 @@ public class ClientService {
             client.setQuartier(clientDetails.getQuartier());
             client.setVille(clientDetails.getVille());
             client.setNomAgent(clientDetails.getNomAgent());
-            // Mettre à jour les cartes associées
+
             if (clientDetails.getCartes() != null) {
                 for (Carte carte : clientDetails.getCartes()) {
-                    carte.setClient(client);  // Définit l'association
+                    carte.setClient(client);
                 }
             }
             return clientRepository.save(client);
@@ -66,7 +65,7 @@ public class ClientService {
     public Carte addCarteToClient(Long clientId, Carte carte) {
         Client client = getClientById(clientId);
         if (client != null) {
-            carte.setClient(client);  // Associe le client à la carte
+            carte.setClient(client);
             return carteRepository.save(carte);
         } else {
             throw new IllegalArgumentException("Client non trouvé avec l'ID fourni.");
@@ -79,7 +78,7 @@ public class ClientService {
             Carte carte = carteOptional.get();
             carte.setActive(carteDetails.isActive());
             carte.setDateExpiration(carteDetails.getDateExpiration());
-            carte.setClient(carteDetails.getClient());  // Associe le client si nécessaire
+            carte.setClient(carteDetails.getClient());
             return carteRepository.save(carte);
         }
         return null;
@@ -87,5 +86,10 @@ public class ClientService {
 
     public List<Carte> getAllCartes() {
         return carteRepository.findAll();
+    }
+
+    // Nouvelle méthode pour récupérer une carte par ID
+    public Carte getCarteById(Long carteId) {
+        return carteRepository.findById(carteId).orElse(null);
     }
 }
