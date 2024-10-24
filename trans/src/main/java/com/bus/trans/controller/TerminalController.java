@@ -1,6 +1,5 @@
 package com.bus.trans.controller;
 
-
 import com.bus.trans.model.Terminal;
 import com.bus.trans.service.TerminalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +15,12 @@ public class TerminalController {
     @Autowired
     private TerminalService terminalService;
 
-    // Récupérer tous les terminaux
     @GetMapping
     public ResponseEntity<List<Terminal>> getAllTerminals() {
         List<Terminal> terminals = terminalService.getAllTerminals();
         return ResponseEntity.ok(terminals);
     }
 
-    // Créer un nouveau terminal
     @PostMapping("/create")
     public ResponseEntity<Terminal> createTerminal(@RequestBody Terminal terminal) {
         try {
@@ -34,7 +31,6 @@ public class TerminalController {
         }
     }
 
-    // Récupérer un terminal par son adresse MAC
     @GetMapping("/mac/{macAddress}")
     public ResponseEntity<Terminal> getTerminalByMacAddress(@PathVariable String macAddress) {
         Terminal terminal = terminalService.getTerminalByMacAddress(macAddress);
@@ -44,7 +40,16 @@ public class TerminalController {
         return ResponseEntity.notFound().build();
     }
 
-    // Mettre à jour un terminal par adresse MAC
+    // Nouvelle route pour récupérer un terminal par ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Terminal> getTerminalById(@PathVariable Long id) {
+        Terminal terminal = terminalService.getTerminalById(id);
+        if (terminal != null) {
+            return ResponseEntity.ok(terminal);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/mac/{macAddress}")
     public ResponseEntity<Terminal> updateTerminal(@PathVariable String macAddress, @RequestBody Terminal terminalDetails) {
         Terminal terminal = terminalService.updateTerminal(macAddress, terminalDetails);
@@ -54,7 +59,6 @@ public class TerminalController {
         return ResponseEntity.notFound().build();
     }
 
-    // Supprimer un terminal par ID
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTerminal(@PathVariable Long id) {
         terminalService.deleteTerminal(id);
