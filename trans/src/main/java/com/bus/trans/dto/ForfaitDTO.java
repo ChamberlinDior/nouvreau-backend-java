@@ -10,17 +10,25 @@ public class ForfaitDTO {
     private Date dateExpiration;  // Date d'expiration du forfait
     private Long carteId;  // Identifiant de la carte associée
     private String rfid;  // RFID de la carte associée
+    private boolean actif;  // Statut du forfait (actif/inactif)
 
     // Constructeur vide
     public ForfaitDTO() {}
 
     // Constructeur complet avec tous les champs
-    public ForfaitDTO(Long id, String typeForfait, Date dateActivation, Date dateExpiration, Long carteId, String rfid) {
+    public ForfaitDTO(Long id, String typeForfait, Date dateActivation, Date dateExpiration, Long carteId, String rfid, boolean actif) {
         this.id = id;
         this.typeForfait = typeForfait;
         this.dateActivation = dateActivation;
         this.dateExpiration = dateExpiration;
         this.carteId = carteId;
+        this.rfid = rfid;
+        this.actif = actif;
+    }
+
+    // Constructeur pour créer un forfait sans date d'expiration initiale
+    public ForfaitDTO(String typeForfait, String rfid) {
+        this.typeForfait = typeForfait;
         this.rfid = rfid;
     }
 
@@ -73,6 +81,14 @@ public class ForfaitDTO {
         this.rfid = rfid;
     }
 
+    public boolean isActif() {
+        return actif;
+    }
+
+    public void setActif(boolean actif) {
+        this.actif = actif;
+    }
+
     @Override
     public String toString() {
         return "ForfaitDTO{" +
@@ -82,6 +98,7 @@ public class ForfaitDTO {
                 ", dateExpiration=" + dateExpiration +
                 ", carteId=" + carteId +
                 ", rfid='" + rfid + '\'' +
+                ", actif=" + actif +
                 '}';
     }
 }

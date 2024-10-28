@@ -45,7 +45,6 @@ public class DTOConverter {
         }
         client.setNomAgent(clientDTO.getNomAgent());
 
-        // Conversion des cartes
         List<Carte> cartes = new ArrayList<>();
         if (clientDTO.getCartes() != null) {
             for (CarteDTO carteDTO : clientDTO.getCartes()) {
@@ -85,7 +84,6 @@ public class DTOConverter {
             throw new IllegalArgumentException("Erreur de format de la date de création", e);
         }
 
-        // Conversion de la date d'expiration
         if (carteDTO.getDateExpiration() != null && !carteDTO.getDateExpiration().isEmpty()) {
             try {
                 Date dateExpiration = sdf.parse(carteDTO.getDateExpiration());
@@ -99,7 +97,6 @@ public class DTOConverter {
         carte.setActive(carteDTO.isActive());
         carte.setForfaitActif(carteDTO.isForfaitActif());
 
-        // Conversion de la date d'expiration du forfait
         if (carteDTO.getForfaitExpiration() != null && !carteDTO.getForfaitExpiration().isEmpty()) {
             try {
                 Date forfaitExpiration = sdf.parse(carteDTO.getForfaitExpiration());

@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
     Optional<Utilisateur> findByRfid(String rfid);
+    Optional<Utilisateur> findByUniqueUserNumber(String uniqueUserNumber);
 }

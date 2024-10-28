@@ -23,7 +23,7 @@ public class ForfaitVerificationService {
                 forfaitVerificationDTO.getAndroidId(),
                 forfaitVerificationDTO.getRoleUtilisateur(),
                 forfaitVerificationDTO.getNomUtilisateur(),
-                forfaitVerificationDTO.isForfaitActiverParClient()  // **Prise en compte de la nouvelle propriété**
+                forfaitVerificationDTO.isForfaitActiverParClient()  // Prise en compte de la nouvelle propriété
         );
 
         return forfaitVerificationRepository.save(verification);
@@ -32,5 +32,10 @@ public class ForfaitVerificationService {
     // Récupérer toutes les vérifications de forfaits
     public List<ForfaitVerification> getAllForfaitVerifications() {
         return forfaitVerificationRepository.findAll();
+    }
+
+    // Récupérer l'historique des vérifications pour un RFID spécifique
+    public List<ForfaitVerification> getForfaitVerificationsByRfid(String rfid) {
+        return forfaitVerificationRepository.findByRfid(rfid);
     }
 }

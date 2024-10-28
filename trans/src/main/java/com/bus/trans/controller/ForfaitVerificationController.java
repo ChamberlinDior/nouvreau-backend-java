@@ -33,4 +33,14 @@ public class ForfaitVerificationController {
         List<ForfaitVerification> verifications = forfaitVerificationService.getAllForfaitVerifications();
         return ResponseEntity.ok(verifications);
     }
+
+    // Récupérer l'historique des vérifications pour un RFID spécifique
+    @GetMapping("/rfid/{rfid}")
+    public ResponseEntity<List<ForfaitVerification>> getForfaitVerificationsByRfid(@PathVariable String rfid) {
+        List<ForfaitVerification> verifications = forfaitVerificationService.getForfaitVerificationsByRfid(rfid);
+        if (verifications.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(verifications);
+    }
 }

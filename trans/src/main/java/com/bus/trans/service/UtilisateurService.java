@@ -30,6 +30,21 @@ public class UtilisateurService {
         return utilisateurRepository.findByRfid(rfid).orElse(null);
     }
 
+    public Utilisateur getUtilisateurByUniqueUserNumber(String uniqueUserNumber) {
+        return utilisateurRepository.findByUniqueUserNumber(uniqueUserNumber).orElse(null);
+    }
+
+    public Utilisateur loginUtilisateur(String rfid, String uniqueUserNumber) {
+        Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findByRfid(rfid);
+        if (utilisateurOpt.isPresent()) {
+            Utilisateur utilisateur = utilisateurOpt.get();
+            if (utilisateur.getUniqueUserNumber().equalsIgnoreCase(uniqueUserNumber)) {
+                return utilisateur;
+            }
+        }
+        return null;
+    }
+
     public Utilisateur updateUtilisateur(Long id, Utilisateur utilisateurDetails) {
         Utilisateur utilisateur = getUtilisateurById(id);
         if (utilisateur != null) {

@@ -6,12 +6,16 @@ import com.bus.trans.repository.CarteRepository;
 import com.bus.trans.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ClientService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
 
     @Autowired
     private ClientRepository clientRepository;
@@ -58,8 +62,15 @@ public class ClientService {
     }
 
     public Client getClientByRFID(String rfid) {
-        Optional<Carte> carte = carteRepository.findByRfid(rfid);
-        return carte.map(Carte::getClient).orElse(null);
+        logger.info("Recherche de client par RFID: {}", rfid);
+        Optional<Client> clientOpt = clientRepository.findClientByRFID(rfid.toUpperCase().trim());
+        if (clientOpt.isPresent()) {
+            logger.info("Client trouvé pour RFID: {}", rfid);
+            return clientOpt.get();
+        } else {
+            logger.warn("Aucun client trouvé pour RFID: {}", rfid);
+            return null;
+        }
     }
 
     public Carte addCarteToClient(Long clientId, Carte carte) {
@@ -88,7 +99,6 @@ public class ClientService {
         return carteRepository.findAll();
     }
 
-    // Nouvelle méthode pour récupérer une carte par ID
     public Carte getCarteById(Long carteId) {
         return carteRepository.findById(carteId).orElse(null);
     }
