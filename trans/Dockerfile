@@ -2,6 +2,10 @@
 FROM eclipse-temurin:21-jdk-alpine as build
 WORKDIR /opt/app
 
+# Set UTF-8 encoding
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
 # Copy Maven wrapper and related files
 COPY mvnw ./
 COPY .mvn .mvn
