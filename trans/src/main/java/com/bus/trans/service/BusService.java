@@ -2,8 +2,8 @@ package com.bus.trans.service;
 
 import com.bus.trans.model.Bus;
 import com.bus.trans.model.BusChangeLog;
-import com.bus.trans.repository.BusChangeLogRepository;
 import com.bus.trans.repository.BusRepository;
+import com.bus.trans.repository.BusChangeLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,7 +63,15 @@ public class BusService {
         return busRepository.save(bus);
     }
 
-    // Mettre à jour le chauffeur et la destination
+    // Mise à jour de l'année de création
+    public Bus updateAnneeCreation(Long busId, String anneeCreation) {
+        Bus bus = busRepository.findById(busId).orElseThrow(() ->
+                new IllegalArgumentException("Bus introuvable"));
+        bus.setAnneeCreation(anneeCreation);
+        return busRepository.save(bus);
+    }
+
+    // Mettre à jour le chauffeur et la destination par adresse MAC
     public Bus updateChauffeurAndDestinationByMacAddress(String macAddress, String lastDestination, String chauffeurNom, String chauffeurUniqueNumber) {
         Bus bus = busRepository.findByMacAddress(macAddress);
         if (bus != null) {

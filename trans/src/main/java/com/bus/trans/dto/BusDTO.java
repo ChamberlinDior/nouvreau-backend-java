@@ -1,6 +1,5 @@
 package com.bus.trans.dto;
 
-
 import java.util.Date;
 
 public class BusDTO {
@@ -15,11 +14,11 @@ public class BusDTO {
     private Date debutTrajet;
     private Date finTrajet;
     private String lastDestination;
-    private Integer niveauBatterie; // Nouveau champ pour le niveau de batterie
-    private boolean isCharging; // Nouveau champ pour l'état de charge
+    private Integer niveauBatterie;
+    private boolean isCharging;
+    private String anneeCreation; // Nouveau champ
 
     // Getters et Setters
-
     public Long getId() {
         return id;
     }
@@ -123,5 +122,12 @@ public class BusDTO {
     public void setCharging(boolean isCharging) {
         this.isCharging = isCharging;
     }
-}
 
+    public String getAnneeCreation() {
+        return anneeCreation;
+    }
+
+    public void setAnneeCreation(String anneeCreation) {
+        this.anneeCreation = anneeCreation;
+    }
+}

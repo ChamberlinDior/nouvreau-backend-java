@@ -48,7 +48,7 @@ public class BusController {
         }
     }
 
-    // Mise à jour individuelle du matricule
+    // Mise à jour du matricule d'un bus
     @PatchMapping("/{busId}/matricule")
     public ResponseEntity<?> updateMatricule(@PathVariable Long busId, @RequestParam String matricule) {
         try {
@@ -59,7 +59,7 @@ public class BusController {
         }
     }
 
-    // Mise à jour individuelle du modèle
+    // Mise à jour du modèle d'un bus
     @PatchMapping("/{busId}/modele")
     public ResponseEntity<?> updateModele(@PathVariable Long busId, @RequestParam String modele) {
         try {
@@ -70,7 +70,7 @@ public class BusController {
         }
     }
 
-    // Mise à jour individuelle de la marque
+    // Mise à jour de la marque d'un bus
     @PatchMapping("/{busId}/marque")
     public ResponseEntity<?> updateMarque(@PathVariable Long busId, @RequestParam String marque) {
         try {
@@ -78,6 +78,17 @@ public class BusController {
             return ResponseEntity.ok(updatedBus);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erreur lors de la mise à jour de la marque : " + e.getMessage());
+        }
+    }
+
+    // Mise à jour de l'année de création d'un bus
+    @PatchMapping("/{busId}/anneeCreation")
+    public ResponseEntity<?> updateAnneeCreation(@PathVariable Long busId, @RequestParam String anneeCreation) {
+        try {
+            Bus updatedBus = busService.updateAnneeCreation(busId, anneeCreation);
+            return ResponseEntity.ok(updatedBus);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la mise à jour de l'année de création : " + e.getMessage());
         }
     }
 
@@ -112,7 +123,6 @@ public class BusController {
             @PathVariable String macAddress,
             @RequestParam Integer niveauBatterie,
             @RequestParam boolean isCharging) {
-
         Bus bus = busService.updateBatteryLevel(macAddress, niveauBatterie, isCharging);
         return bus != null ? ResponseEntity.ok("Niveau de batterie et état de charge mis à jour avec succès.") : ResponseEntity.notFound().build();
     }

@@ -49,8 +49,10 @@ public class Bus {
     @Column(name = "last_destination")
     private String lastDestination;
 
-    // Getters et Setters
+    @Column(name = "annee_creation", nullable = true)
+    private String anneeCreation; // Nouveau champ
 
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -153,5 +155,13 @@ public class Bus {
 
     public void setCharging(boolean isCharging) {
         this.isCharging = isCharging;
+    }
+
+    public String getAnneeCreation() {
+        return anneeCreation;
+    }
+
+    public void setAnneeCreation(String anneeCreation) {
+        this.anneeCreation = anneeCreation;
     }
 }
