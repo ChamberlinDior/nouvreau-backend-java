@@ -26,7 +26,9 @@ public class BusService {
 
     // Récupérer un bus par son ID
     public Bus getBusById(Long busId) {
-        return busRepository.findById(busId).orElse(null);
+        Bus bus =busRepository.findById(busId).orElse(null);
+        System.out.println(bus.toString());
+        return bus;
     }
 
     // Récupérer un bus par son adresse MAC
