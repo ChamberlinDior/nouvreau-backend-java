@@ -1,6 +1,5 @@
 package com.bus.trans.controller;
 
-
 import com.bus.trans.model.Bus;
 import com.bus.trans.model.BusChangeLog;
 import com.bus.trans.service.BusService;
@@ -22,6 +21,13 @@ public class BusController {
     public ResponseEntity<List<Bus>> getAllBuses() {
         List<Bus> buses = busService.getAllBuses();
         return ResponseEntity.ok(buses);
+    }
+
+    // Récupérer un bus par son ID
+    @GetMapping("/{busId}")
+    public ResponseEntity<Bus> getBusById(@PathVariable Long busId) {
+        Bus bus = busService.getBusById(busId);
+        return bus != null ? ResponseEntity.ok(bus) : ResponseEntity.notFound().build();
     }
 
     // Récupérer un bus par son adresse MAC
@@ -74,8 +80,6 @@ public class BusController {
             return ResponseEntity.badRequest().body("Erreur lors de la mise à jour de la marque : " + e.getMessage());
         }
     }
-
-    // Ajoutez d'autres méthodes similaires pour chaque champ (adresse MAC, niveau de batterie, etc.)
 
     // Mettre à jour le chauffeur et la destination par adresse MAC
     @PostMapping("/mac/{macAddress}/update-chauffeur-destination")

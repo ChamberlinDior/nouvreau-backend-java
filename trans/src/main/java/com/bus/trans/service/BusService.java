@@ -1,6 +1,5 @@
 package com.bus.trans.service;
 
-
 import com.bus.trans.model.Bus;
 import com.bus.trans.model.BusChangeLog;
 import com.bus.trans.repository.BusChangeLogRepository;
@@ -25,14 +24,19 @@ public class BusService {
         return busRepository.findAll();
     }
 
-    // Enregistrer un bus
-    public Bus saveBus(Bus bus) {
-        return busRepository.save(bus);
+    // Récupérer un bus par son ID
+    public Bus getBusById(Long busId) {
+        return busRepository.findById(busId).orElse(null);
     }
 
     // Récupérer un bus par son adresse MAC
     public Bus getBusByMacAddress(String macAddress) {
         return busRepository.findByMacAddress(macAddress);
+    }
+
+    // Enregistrer un bus
+    public Bus saveBus(Bus bus) {
+        return busRepository.save(bus);
     }
 
     // Mise à jour du matricule
