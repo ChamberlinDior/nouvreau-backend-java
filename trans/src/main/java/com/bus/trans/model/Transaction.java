@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
@@ -11,25 +12,23 @@ public class Transaction {
     private Long id;
 
     @Column(nullable = false)
-    private Long clientId;
+    private String typeTransaction;
 
     @Column(nullable = false)
-    private String clientRfid;
-
-    @Column(nullable = false)
-    private String nom;
-
-    @Column(nullable = false)
-    private String prenom;
-
-    @Column(nullable = false)
-    private double montant;
+    private Double montant;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateTransaction;
 
-    // Getters and Setters
+    @Column(nullable = false)
+    private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -38,43 +37,19 @@ public class Transaction {
         this.id = id;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public String getTypeTransaction() {
+        return typeTransaction;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setTypeTransaction(String typeTransaction) {
+        this.typeTransaction = typeTransaction;
     }
 
-    public String getClientRfid() {
-        return clientRfid;
-    }
-
-    public void setClientRfid(String clientRfid) {
-        this.clientRfid = clientRfid;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public double getMontant() {
+    public Double getMontant() {
         return montant;
     }
 
-    public void setMontant(double montant) {
+    public void setMontant(Double montant) {
         this.montant = montant;
     }
 
@@ -84,5 +59,21 @@ public class Transaction {
 
     public void setDateTransaction(Date dateTransaction) {
         this.dateTransaction = dateTransaction;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

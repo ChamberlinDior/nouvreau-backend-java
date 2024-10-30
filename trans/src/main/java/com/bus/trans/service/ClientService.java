@@ -23,10 +23,12 @@ public class ClientService {
     @Autowired
     private CarteRepository carteRepository;
 
+    // Méthode pour récupérer tous les clients
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
+    // Méthode pour créer un nouveau client
     public Client createClient(Client client) {
         if (client.getCartes() != null) {
             for (Carte carte : client.getCartes()) {
@@ -36,6 +38,7 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    // Méthode pour mettre à jour un client existant
     public Client updateClient(Long id, Client clientDetails) {
         Optional<Client> clientOptional = clientRepository.findById(id);
         if (clientOptional.isPresent()) {
@@ -57,10 +60,12 @@ public class ClientService {
         }
     }
 
+    // Méthode pour récupérer un client par ID
     public Client getClientById(Long id) {
         return clientRepository.findById(id).orElse(null);
     }
 
+    // Méthode pour récupérer un client par RFID
     public Client getClientByRFID(String rfid) {
         logger.info("Recherche de client par RFID: {}", rfid);
         Optional<Client> clientOpt = clientRepository.findClientByRFID(rfid.toUpperCase().trim());
@@ -73,6 +78,17 @@ public class ClientService {
         }
     }
 
+    // Méthode pour supprimer un client
+    public void deleteClient(Long id) {
+        Optional<Client> clientOptional = clientRepository.findById(id);
+        if (clientOptional.isPresent()) {
+            clientRepository.delete(clientOptional.get());
+        } else {
+            throw new IllegalArgumentException("Client non trouvé avec l'ID fourni");
+        }
+    }
+
+    // Méthode pour ajouter une carte à un client
     public Carte addCarteToClient(Long clientId, Carte carte) {
         Client client = getClientById(clientId);
         if (client != null) {
@@ -83,6 +99,7 @@ public class ClientService {
         }
     }
 
+    // Méthode pour mettre à jour une carte existante
     public Carte updateCarte(Long carteId, Carte carteDetails) {
         Optional<Carte> carteOptional = carteRepository.findById(carteId);
         if (carteOptional.isPresent()) {
@@ -91,14 +108,27 @@ public class ClientService {
             carte.setDateExpiration(carteDetails.getDateExpiration());
             carte.setClient(carteDetails.getClient());
             return carteRepository.save(carte);
+        } else {
+            throw new IllegalArgumentException("Carte non trouvée avec l'ID fourni");
         }
-        return null;
     }
 
+    // Méthode pour supprimer une carte
+    public void deleteCarte(Long carteId) {
+        Optional<Carte> carteOptional = carteRepository.findById(carteId);
+        if (carteOptional.isPresent()) {
+            carteRepository.delete(carteOptional.get());
+        } else {
+            throw new IllegalArgumentException("Carte non trouvée avec l'ID fourni");
+        }
+    }
+
+    // Méthode pour récupérer toutes les cartes
     public List<Carte> getAllCartes() {
         return carteRepository.findAll();
     }
 
+    // Méthode pour récupérer une carte par ID
     public Carte getCarteById(Long carteId) {
         return carteRepository.findById(carteId).orElse(null);
     }

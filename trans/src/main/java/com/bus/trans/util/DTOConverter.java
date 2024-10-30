@@ -16,6 +16,7 @@ public class DTOConverter {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    // Conversion d'un Client vers ClientDTO
     public static ClientDTO convertToClientDTO(Client client) {
         ClientDTO clientDTO = new ClientDTO();
         clientDTO.setId(client.getId());
@@ -26,10 +27,11 @@ public class DTOConverter {
         clientDTO.setVille(client.getVille());
         clientDTO.setDateCreation(sdf.format(client.getDateCreation()));
         clientDTO.setNomAgent(client.getNomAgent());
-        clientDTO.setCartes(convertToCarteDTOs(client.getCartes()));
+        clientDTO.setCartes(convertToCarteDTOs(client.getCartes())); // Convertir les cartes associées
         return clientDTO;
     }
 
+    // Conversion d'un ClientDTO vers Client
     public static Client convertToClient(ClientDTO clientDTO) {
         Client client = new Client();
         client.setId(clientDTO.getId());
@@ -38,17 +40,21 @@ public class DTOConverter {
         client.setPrenom(clientDTO.getPrenom());
         client.setQuartier(clientDTO.getQuartier());
         client.setVille(clientDTO.getVille());
+
+        // Conversion de la date de création
         try {
             client.setDateCreation(sdf.parse(clientDTO.getDateCreation()));
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Erreur de format de la date", e);
+            throw new IllegalArgumentException("Erreur de format de la date de création", e);
         }
+
         client.setNomAgent(clientDTO.getNomAgent());
 
         List<Carte> cartes = new ArrayList<>();
         if (clientDTO.getCartes() != null) {
             for (CarteDTO carteDTO : clientDTO.getCartes()) {
                 Carte carte = convertToCarte(carteDTO);
+                carte.setClient(client); // Associer la carte au client
                 cartes.add(carte);
             }
         }
@@ -57,37 +63,46 @@ public class DTOConverter {
         return client;
     }
 
+    // Conversion d'une liste de Cartes vers CarteDTOs
     public static List<CarteDTO> convertToCarteDTOs(List<Carte> cartes) {
         return cartes.stream().map(DTOConverter::convertToCarteDTO).collect(Collectors.toList());
     }
 
+    // Conversion d'une Carte vers CarteDTO
     public static CarteDTO convertToCarteDTO(Carte carte) {
         CarteDTO carteDTO = new CarteDTO();
         carteDTO.setId(carte.getId());
         carteDTO.setRfid(carte.getRfid());
         carteDTO.setDateCreation(sdf.format(carte.getDateCreation()));
-        carteDTO.setDateExpiration(carte.getDateExpiration() != null ? sdf.format(carte.getDateExpiration()) : null);
+        carteDTO.setDateExpiration(
+                carte.getDateExpiration() != null ? sdf.format(carte.getDateExpiration()) : null
+        );
         carteDTO.setNomAgent(carte.getNomAgent());
         carteDTO.setActive(carte.isActive());
         carteDTO.setForfaitActif(carte.isForfaitActif());
-        carteDTO.setForfaitExpiration(carte.getForfaitExpiration() != null ? sdf.format(carte.getForfaitExpiration()) : null);
+        carteDTO.setForfaitExpiration(
+                carte.getForfaitExpiration() != null ? sdf.format(carte.getForfaitExpiration()) : null
+        );
         return carteDTO;
     }
 
+    // Conversion d'un CarteDTO vers Carte
     public static Carte convertToCarte(CarteDTO carteDTO) {
         Carte carte = new Carte();
         carte.setId(carteDTO.getId());
         carte.setRfid(carteDTO.getRfid());
+
+        // Conversion de la date de création
         try {
             carte.setDateCreation(sdf.parse(carteDTO.getDateCreation()));
         } catch (ParseException e) {
             throw new IllegalArgumentException("Erreur de format de la date de création", e);
         }
 
+        // Conversion de la date d'expiration
         if (carteDTO.getDateExpiration() != null && !carteDTO.getDateExpiration().isEmpty()) {
             try {
-                Date dateExpiration = sdf.parse(carteDTO.getDateExpiration());
-                carte.setDateExpiration(dateExpiration);
+                carte.setDateExpiration(sdf.parse(carteDTO.getDateExpiration()));
             } catch (ParseException e) {
                 throw new IllegalArgumentException("Erreur de format de la date d'expiration", e);
             }
@@ -97,10 +112,10 @@ public class DTOConverter {
         carte.setActive(carteDTO.isActive());
         carte.setForfaitActif(carteDTO.isForfaitActif());
 
+        // Conversion de la date d'expiration du forfait
         if (carteDTO.getForfaitExpiration() != null && !carteDTO.getForfaitExpiration().isEmpty()) {
             try {
-                Date forfaitExpiration = sdf.parse(carteDTO.getForfaitExpiration());
-                carte.setForfaitExpiration(forfaitExpiration);
+                carte.setForfaitExpiration(sdf.parse(carteDTO.getForfaitExpiration()));
             } catch (ParseException e) {
                 throw new IllegalArgumentException("Erreur de format de la date d'expiration du forfait", e);
             }
@@ -109,6 +124,7 @@ public class DTOConverter {
         return carte;
     }
 
+    // Conversion d'une liste de Clients vers ClientDTOs
     public static List<ClientDTO> convertToClientDTOs(List<Client> clients) {
         return clients.stream().map(DTOConverter::convertToClientDTO).collect(Collectors.toList());
     }

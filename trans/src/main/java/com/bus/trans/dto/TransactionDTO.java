@@ -1,18 +1,14 @@
 package com.bus.trans.dto;
 
-import java.util.Date;
-
 public class TransactionDTO {
 
     private Long id;
-    private Long clientId;
-    private String clientRfid;
-    private String nom;
-    private String prenom;
-    private double montant;
-    private Date dateTransaction;
+    private String typeTransaction;
+    private Double montant;
+    private String dateTransaction;
+    private String status;
 
-    // Getters and Setters
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -21,51 +17,35 @@ public class TransactionDTO {
         this.id = id;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public String getTypeTransaction() {
+        return typeTransaction;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setTypeTransaction(String typeTransaction) {
+        this.typeTransaction = typeTransaction;
     }
 
-    public String getClientRfid() {
-        return clientRfid;
-    }
-
-    public void setClientRfid(String clientRfid) {
-        this.clientRfid = clientRfid;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public double getMontant() {
+    public Double getMontant() {
         return montant;
     }
 
-    public void setMontant(double montant) {
+    public void setMontant(Double montant) {
         this.montant = montant;
     }
 
-    public Date getDateTransaction() {
+    public String getDateTransaction() {
         return dateTransaction;
     }
 
-    public void setDateTransaction(Date dateTransaction) {
+    public void setDateTransaction(String dateTransaction) {
         this.dateTransaction = dateTransaction;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
